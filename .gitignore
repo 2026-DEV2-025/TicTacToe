@@ -5,6 +5,15 @@
 ## User settings
 xcuserdata/
 
+DerivedData/
+*.xcuserstate
+
+# Signing / local build artifacts
+*.mobileprovision
+*.p12
+*.cer
+
+
 ## Obj-C/Swift specific
 *.hmap
 
