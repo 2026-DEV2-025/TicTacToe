@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TicTacToeEngine
 
 struct ContentView: View {
     var body: some View {

@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		6306A0B12F2191B10007A682 /* TicTacToeEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 6306A0B02F2191B10007A682 /* TicTacToeEngine */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		6338C9CD2F21892400658AE5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6306A0B12F2191B10007A682 /* TicTacToeEngine in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,12 +77,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6306A0AF2F2191B10007A682 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		6338C9B62F21892300658AE5 = {
 			isa = PBXGroup;
 			children = (
 				6338C9C12F21892300658AE5 /* TicTacToe */,
 				6338C9CF2F21892400658AE5 /* TicTacToeTests */,
 				6338C9D92F21892400658AE5 /* TicTacToeUITests */,
+				6306A0AF2F2191B10007A682 /* Frameworks */,
 				6338C9C02F21892300658AE5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -112,6 +125,7 @@
 			);
 			name = TicTacToe;
 			packageProductDependencies = (
+				6306A0B02F2191B10007A682 /* TicTacToeEngine */,
 			);
 			productName = TicTacToe;
 			productReference = 6338C9BF2F21892300658AE5 /* TicTacToe.app */;
@@ -615,6 +629,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6306A0B02F2191B10007A682 /* TicTacToeEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TicTacToeEngine;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6338C9B72F21892300658AE5 /* Project object */;
 }
