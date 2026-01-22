@@ -26,7 +26,7 @@ struct GridView : View {
                         .background(Color.black)
                 }
             }
-            WinningLine(gridSize: gridSize, winningIndexes: [[1,1],[3,3]])
+            WinningLineView(gridSize: gridSize, winningIndexes: [[1,1],[3,3]])
         }
     }
 }

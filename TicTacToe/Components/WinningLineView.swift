@@ -1,5 +1,5 @@
 //
-//  WinningLine.swift
+//  WinningLineView.swift
 //  TicTacToe
 //
 //  Created by 2026-DEV2-025 on 22/01/2026.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct WinningLine: View {
+struct WinningLineView: View {
     var color: Color = .green
     var lineWidth: CGFloat = 6
     
@@ -37,9 +37,9 @@ struct WinningLine: View {
 }
 
 #Preview {
-    WinningLine(gridSize:3, winningIndexes: [[1,1],[3,3]])
+    WinningLineView(gridSize:3, winningIndexes: [[1,1],[3,3]])
         .frame(width: 200, height: 200)
 
-    WinningLine(gridSize:3, winningIndexes: [[1,3],[3,3]])
+    WinningLineView(gridSize:3, winningIndexes: [[1,3],[3,3]])
         .frame(width: 200, height: 200)
 }
