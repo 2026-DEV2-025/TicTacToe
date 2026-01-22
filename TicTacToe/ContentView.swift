@@ -10,8 +10,7 @@ import TicTacToeEngine
 
 struct ContentView: View {
     
-    let ROWS: Int = 3  //fixme: make injection
-    let COLS: Int = 3  //fixme: make injection
+    let GRID_SIZE: Int = 3  //fixme: make injection
     
     var body: some View {
         GeometryReader { geo in
@@ -49,7 +48,7 @@ struct ContentView: View {
         let yPosition = isLandscape ? geo.size.height + safeAreaInsets.bottom : geo.size.height - sideLength
         let safeSideLength = isLandscape ? sideLength + safeAreaInsets.bottom  : sideLength
         
-        return GridView(rows: ROWS, cols: COLS)
+        return GridView(gridSize: GRID_SIZE)
             .frame(width: safeSideLength, height: safeSideLength)
             .position(x: xPosition / 2, y: yPosition / 2)
     }
