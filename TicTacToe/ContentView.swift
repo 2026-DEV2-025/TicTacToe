@@ -9,14 +9,48 @@ import SwiftUI
 import TicTacToeEngine
 
 struct ContentView: View {
+    
+    let GRID_SIZE: Int = 3  //fixme: make injection
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        GeometryReader { geo in
+            let width = geo.size.width
+            let height = geo.size.height
+            let sideLength = min(width, height)
+            let isLandscape = width > height
+
+            if isLandscape {
+                HStack(spacing: 24) {
+                    VStack(alignment: .trailing, spacing: 3) {
+                        Text("TIC").font(Font.largeTitle)
+                        Text("TAC").font(Font.largeTitle)
+                        Text("TOE").font(Font.largeTitle)
+
+                    }
+                    .font(.title2.weight(.semibold))
+                    .multilineTextAlignment(.center)
+                    gridView(geo, sideLength: sideLength, isLandscape)
+                }
+            } else {
+                VStack(spacing: 24) {
+                    Text("TicTacToe")
+                        .font(Font.largeTitle)
+
+                    gridView(geo, sideLength: sideLength, isLandscape)
+                }
+            }
         }
-        .padding()
+    }
+    
+    func gridView(_ geo: GeometryProxy, sideLength: CGFloat, _ isLandscape: Bool) -> some View {
+        let safeAreaInsets = geo.safeAreaInsets
+        let xPosition = isLandscape ? geo.size.width - sideLength : geo.size.width
+        let yPosition = isLandscape ? geo.size.height + safeAreaInsets.bottom : geo.size.height - sideLength
+        let safeSideLength = isLandscape ? sideLength + safeAreaInsets.bottom  : sideLength
+        
+        return GridView(gridSize: GRID_SIZE)
+            .frame(width: safeSideLength, height: safeSideLength)
+            .position(x: xPosition / 2, y: yPosition / 2)
     }
 }
 
