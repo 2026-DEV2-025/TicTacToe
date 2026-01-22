@@ -26,9 +26,7 @@ struct WinningLine: View {
                         
             Path { path in
                 path.move(to: CGPoint(x: startX, y: startY))
-                path.addLine(
-                    to: CGPoint(x: endX, y: endY)
-                )
+                path.addLine(to: CGPoint(x: endX, y: endY))
             }
             .stroke(
                 color,
