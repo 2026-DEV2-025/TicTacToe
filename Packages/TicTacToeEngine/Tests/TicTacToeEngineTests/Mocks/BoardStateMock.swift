@@ -8,7 +8,7 @@
 @testable import TicTacToeEngine
 
 final class BoardStateMock: BoardState {
-    let moves: [PlayerMove]
+    var moves: [PlayerMove]
     
     init(moves: [PlayerMove]) {
         self.moves = moves

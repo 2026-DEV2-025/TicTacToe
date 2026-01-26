@@ -8,5 +8,6 @@
 enum EngineRulesResult {
     case moveSucceeded
     case onlyXMustStartError
+    case cellIsAlreadyTakenError
     case invalidMoveError
 }

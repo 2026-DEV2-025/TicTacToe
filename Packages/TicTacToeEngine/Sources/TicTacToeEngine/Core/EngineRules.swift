@@ -11,15 +11,18 @@ protocol EngineRules {
 
 struct EngineRulesImpl: EngineRules {
     let boardState: BoardState
-    
+        
     init(boardState: BoardState) {
         self.boardState = boardState
     }
     
     func checkMoveIsValid(move: PlayerMove) -> EngineRulesResult {
-        
-        if !checkFirstMove(for: move) {
+        guard checkFirstMove(for: move) else {
             return .onlyXMustStartError
+        }
+        
+        guard !alreadyPlayedPosition(for: move) else {
+            return .cellIsAlreadyTakenError
         }
         
         return .moveSucceeded
@@ -34,5 +37,12 @@ extension EngineRulesImpl {
             }
         }
         return true
+    }
+    
+    private func alreadyPlayedPosition(for move: PlayerMove) -> Bool {
+        if boardState.moves.contains(where: { $0.cell == move.cell }) {
+            return true
+        }
+        return false
     }
 }

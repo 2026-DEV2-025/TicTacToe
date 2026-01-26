@@ -39,7 +39,7 @@ final class EngineRulesTests: XCTestCase {
         XCTAssertEqual(engineRules.checkMoveIsValid(move: moveByO), .moveSucceeded)
     }
     
-    //MARK: - Players cannot play on a played position
+    //MARK: - Players cannot play on a played position tests
     
     func testPlayOnTakenPosition() throws {
         let cell = BoardCell(row: 0, column: 0)
@@ -87,4 +87,6 @@ final class EngineRulesTests: XCTestCase {
         let moveByO = PlayerMove(player: .init(type: .o), toCell: emptyCell)
         XCTAssertEqual(engineRules.checkMoveIsValid(move: moveByO), .moveSucceeded)
     }
+    
+    
 }
