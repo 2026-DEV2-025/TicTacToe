@@ -15,25 +15,27 @@ final class EngineRulesTests: XCTestCase {
     //MARK: - X always goes first tests
     
     func testXGoesFirst() throws {
-        let board = Board(cells: [])
-        let boardState = BoardStateMock(moves: [], board: board)
-        let rulesProtocol = EngineRulesImpl(boardState: boardState)
-        let engine = EngineImpl(boardState: boardState, engineRules: rulesProtocol)
-        let playerX = Player(type: .x)
-        let cell = BoardCell(row: 0, column: 0)
-        let move = PlayerMove(player: playerX, toCell: cell)
-        XCTAssertEqual(engine.playerMove(move: move) == .moveSucceeded)
+        let boardState = BoardStateMock(moves: [])
+        let engineRules = EngineRulesImpl(boardState: boardState)
+        let moveByX = PlayerMove(player: .init(type: .x), toCell: .init(row: 0, column: 0))
+        
+        XCTAssertEqual(engineRules.checkMoveIsValid(move: moveByX), .moveSucceeded)
     }
     
     func testOGoesFirst() throws {
-        let board = Board(cells: [])
-        let boardState = BoardStateMock(moves: [], board: board)
-        let rulesProtocol = EngineRulesImpl(boardState: boardState)
-        let engine = EngineImpl(boardState: boardState, engineRules: rulesProtocol)
-        let playerO = Player(type: .o)
-        let cell = BoardCell(row: 0, column: 0)
-        let move = PlayerMove(player: playerO, toCell: cell)
-        XCTAssertEqual(engine.playerMove(move: move) == .onlyXMustStartError)
+        let boardState = BoardStateMock(moves: [])
+        let engineRules = EngineRulesImpl(boardState: boardState)
+        let moveByO = PlayerMove(player: .init(type: .o), toCell: .init(row: 0, column: 0))
+        
+        XCTAssertEqual(engineRules.checkMoveIsValid(move: moveByO), .onlyXMustStartError)
+    }
+
+    func testOCanMoveAfterFirstMove() throws {
+        let firstMoveByX = PlayerMove(player: .init(type: .x), toCell: .init(row: 0, column: 0))
+        let boardState = BoardStateMock(moves: [firstMoveByX])
+        let engineRules = EngineRulesImpl(boardState: boardState)
+        let moveByO = PlayerMove(player: .init(type: .o), toCell: .init(row: 0, column: 1))
+        
+        XCTAssertEqual(engineRules.checkMoveIsValid(move: moveByO), .moveSucceeded)
     }
 }
-

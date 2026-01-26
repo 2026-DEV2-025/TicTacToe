@@ -9,10 +9,8 @@
 
 final class BoardStateMock: BoardState {
     let moves: [PlayerMove]
-    let board: Board
     
-    init(moves: [PlayerMove], board: Board) {
+    init(moves: [PlayerMove]) {
         self.moves = moves
-        self.board = board
     }
 }

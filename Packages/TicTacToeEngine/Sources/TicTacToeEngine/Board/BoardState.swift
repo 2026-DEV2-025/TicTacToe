@@ -6,16 +6,14 @@
 //
 
 protocol BoardState {
-    init(moves: [PlayerMove], board: Board)
+    init(moves: [PlayerMove])
     var moves: [PlayerMove] { get }
 }
 
 final class BoardStateImpl: BoardState {
     let moves: [PlayerMove]
-    let board: Board
     
-    init(moves: [PlayerMove], board: Board) {
+    init(moves: [PlayerMove]) {
         self.moves = moves
-        self.board = board
     }
 }
