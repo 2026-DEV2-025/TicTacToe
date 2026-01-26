@@ -88,5 +88,35 @@ final class EngineRulesTests: XCTestCase {
         XCTAssertEqual(engineRules.checkMoveIsValid(move: moveByO), .moveSucceeded)
     }
     
+    //MARK: Alternating moves by players tests
     
+    func testPlayersAlternatingEachOtherFullBoard() throws {
+        let boardSize = 3
+        let boardState = BoardStateMock(moves: [])
+        let engineRules = EngineRulesImpl(boardState: boardState)
+        var alt = true
+        for i in 0..<boardSize {
+            for j in 0..<boardSize {
+                let moveBy = PlayerMove(player: .init(type: alt ? .x : .o), toCell: .init(row: i, column: j))
+                XCTAssertEqual(engineRules.checkMoveIsValid(move: moveBy), .moveSucceeded)
+                boardState.moves.append(moveBy)
+                alt = !alt
+            }
+        }
+    }
+
+    func testAlternatingPlayersWithSameType() throws {
+        let boardSize = 3
+        let boardState = BoardStateMock(moves: [])
+        let engineRules = EngineRulesImpl(boardState: boardState)
+        for i in 0..<boardSize {
+            for j in 0..<boardSize {
+                let moveBy = PlayerMove(player: .init(type: .x), toCell: .init(row: i, column: j))
+                XCTAssertEqual(engineRules.checkMoveIsValid(move: moveBy), .mustAlternateTurnsError)
+                boardState.moves.append(moveBy)
+            }
+        }
+
+    }
+
 }
