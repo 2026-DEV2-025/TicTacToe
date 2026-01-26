@@ -38,4 +38,53 @@ final class EngineRulesTests: XCTestCase {
         
         XCTAssertEqual(engineRules.checkMoveIsValid(move: moveByO), .moveSucceeded)
     }
+    
+    //MARK: - Players cannot play on a played position
+    
+    func testPlayOnTakenPosition() throws {
+        let cell = BoardCell(row: 0, column: 0)
+
+        let moveByX = PlayerMove(player: .init(type: .x), toCell: cell)
+        let boardState = BoardStateMock(moves: [moveByX])
+        let engineRules = EngineRulesImpl(boardState: boardState)
+        
+        let moveByO = PlayerMove(player: .init(type: .o), toCell: cell)
+        XCTAssertEqual(engineRules.checkMoveIsValid(move: moveByO), .cellIsAlreadyTakenError)
+    }
+    
+    func testPlayOnTakenPositionBySamePlayer() throws {
+        let cell = BoardCell(row: 0, column: 0)
+
+        let moveByX = PlayerMove(player: .init(type: .x), toCell: cell)
+        let boardState = BoardStateMock(moves: [moveByX])
+        let engineRules = EngineRulesImpl(boardState: boardState)
+        
+        let secondMoveByX = PlayerMove(player: .init(type: .x), toCell: cell)
+        XCTAssertEqual(engineRules.checkMoveIsValid(move: secondMoveByX), .cellIsAlreadyTakenError)
+    }
+    
+    func testPlayOnTakenPositionWithMultipleMovesOnBoard() throws {
+        let occupiedCell = BoardCell(row: 0, column: 0)
+        let otherCell = BoardCell(row: 0, column: 1)
+
+        let moveByX = PlayerMove(player: .init(type: .x), toCell: occupiedCell)
+        let moveByO = PlayerMove(player: .init(type: .o), toCell: otherCell)
+        let boardState = BoardStateMock(moves: [moveByX, moveByO])
+        let engineRules = EngineRulesImpl(boardState: boardState)
+        
+        let moveByXOnTakenCell = PlayerMove(player: .init(type: .x), toCell: occupiedCell)
+        XCTAssertEqual(engineRules.checkMoveIsValid(move: moveByXOnTakenCell), .cellIsAlreadyTakenError)
+    }
+    
+    func testPlayOnDifferentEmptyCellAfterMove() throws {
+        let takenCell = BoardCell(row: 0, column: 0)
+        let emptyCell = BoardCell(row: 0, column: 1)
+
+        let moveByX = PlayerMove(player: .init(type: .x), toCell: takenCell)
+        let boardState = BoardStateMock(moves: [moveByX])
+        let engineRules = EngineRulesImpl(boardState: boardState)
+        
+        let moveByO = PlayerMove(player: .init(type: .o), toCell: emptyCell)
+        XCTAssertEqual(engineRules.checkMoveIsValid(move: moveByO), .moveSucceeded)
+    }
 }
