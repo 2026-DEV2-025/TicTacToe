@@ -11,6 +11,10 @@ protocol EngineRules {
 
 struct EngineRulesImpl: EngineRules {
     let boardState: BoardState
+    
+    var lastMove: PlayerMove? {
+        boardState.moves.last
+    }
         
     init(boardState: BoardState) {
         self.boardState = boardState
@@ -23,6 +27,10 @@ struct EngineRulesImpl: EngineRules {
         
         guard !alreadyPlayedPosition(for: move) else {
             return .cellIsAlreadyTakenError
+        }
+        
+        guard isAlternatePlayer(for: move) else {
+            return .mustAlternateTurnsError
         }
         
         return .moveSucceeded
@@ -44,5 +52,12 @@ extension EngineRulesImpl {
             return true
         }
         return false
+    }
+    
+    private func isAlternatePlayer(for move: PlayerMove) -> Bool {
+        guard let lastMove else {
+            return true
+        }
+        return lastMove.player.type != move.player.type
     }
 }

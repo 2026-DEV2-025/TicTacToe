@@ -105,18 +105,33 @@ final class EngineRulesTests: XCTestCase {
         }
     }
 
-    func testAlternatingPlayersWithSameType() throws {
+    func testAlternatingPlayersWithSameTypeX() throws {
         let boardSize = 3
-        let boardState = BoardStateMock(moves: [])
+        let firstMove = PlayerMove(player: .init(type: .x), toCell: .init(row: 0, column: 0))
+        let boardState = BoardStateMock(moves: [firstMove])
         let engineRules = EngineRulesImpl(boardState: boardState)
-        for i in 0..<boardSize {
+        for i in 1..<boardSize {
             for j in 0..<boardSize {
                 let moveBy = PlayerMove(player: .init(type: .x), toCell: .init(row: i, column: j))
                 XCTAssertEqual(engineRules.checkMoveIsValid(move: moveBy), .mustAlternateTurnsError)
                 boardState.moves.append(moveBy)
             }
         }
-
     }
+    
+    func testAlternatingPlayersWithSameTypeO() throws {
+        let boardSize = 3
+        let firstMove = PlayerMove(player: .init(type: .o), toCell: .init(row: 0, column: 0))
+        let boardState = BoardStateMock(moves: [firstMove])
+        let engineRules = EngineRulesImpl(boardState: boardState)
+        for i in 1..<boardSize {
+            for j in 0..<boardSize {
+                let moveBy = PlayerMove(player: .init(type: .o), toCell: .init(row: i, column: j))
+                XCTAssertEqual(engineRules.checkMoveIsValid(move: moveBy), .mustAlternateTurnsError)
+                boardState.moves.append(moveBy)
+            }
+        }
+    }
+
 
 }
