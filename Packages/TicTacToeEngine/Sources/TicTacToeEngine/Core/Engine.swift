@@ -57,13 +57,19 @@ private extension Engine {
     }
     
     func checkColumns(for type: PlayerType) -> [BoardCell]? {
-        let cells = boardState.getCells(for: type).transposed()
+        guard let cells = boardState.getCells(for: type).transposed() else {
+            return nil
+        }
         return winningLine(in: cells)
     }
     
     func checkDiagonals(for type: PlayerType) -> [BoardCell]? {
-        let cellsDiagonal = boardState.getCells(for: type).diagonalTopLeftToBottomRight()
-        let cellsAntiDiagonal = boardState.getCells(for: type).diagonalTopRightToBottomLeft()
+        guard
+            let cellsDiagonal = boardState.getCells(for: type).diagonalTopLeftToBottomRight(),
+            let cellsAntiDiagonal = boardState.getCells(for: type).diagonalTopRightToBottomLeft()
+        else {
+            return nil
+        }
         
         if let line = winningLine(in: cellsDiagonal) {
             return line

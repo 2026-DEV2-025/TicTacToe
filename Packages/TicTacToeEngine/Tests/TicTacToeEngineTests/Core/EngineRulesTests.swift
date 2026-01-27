@@ -150,7 +150,7 @@ final class EngineRulesTests: XCTestCase {
         for i in 0..<boardSize {
             let moveBy = PlayerMove(
                 player: .init(type: .x),
-                toCell: .init(row: i, column: 0)
+                toCell: .init(row: 0, column: i)
             )
             boardState.addMove(moveBy)
             validationWinnerCells.append(moveBy.cell)
@@ -168,21 +168,24 @@ final class EngineRulesTests: XCTestCase {
         let boardState = BoardStateImpl(moves: [])
         let engineRules = EngineRulesImpl(boardState: boardState)
         let engine = Engine(boardState: boardState, engineRules: engineRules)
-        var validationWinnerCells = [BoardCell]()
+        var validationWinnerCells = [BoardCell?]()
         for j in 0..<boardSize {
             let moveBy = PlayerMove(
                 player: .init(type: .x),
-                toCell: .init(row: 0, column: j)
+                toCell: .init(row: j, column: 0)
             )
             boardState.addMove(moveBy)
             validationWinnerCells.append(moveBy.cell)
         }
         
+        //adding padding so column will be transposed correctly for the validation
+        validationWinnerCells.append(contentsOf: Array(repeating: nil, count: boardSize * boardSize - 3))
+        
         let lastPlayed = boardState.moves.last!
         let winner = engine.checkWinner(for: lastPlayed.player.type)
         XCTAssertNotNil(winner)
         XCTAssertEqual(winner.type, .x)
-        XCTAssertEqual(winner.cells, validationWinnerCells)
+        XCTAssertEqual(winner.cells, validationWinnerCells.transposed()!.compactMap { $0 })
         XCTAssertEqual(winner.rulesResult, .moveSucceeded)
     }
     
