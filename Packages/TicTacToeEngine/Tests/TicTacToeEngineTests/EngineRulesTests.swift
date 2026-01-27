@@ -137,82 +137,91 @@ final class EngineRulesTests: XCTestCase {
     
     //MARK: - Finishing the game
     
-//    //fixme: optimize into one test 2 tests below
-//    func testPlayerHasThreeInARow() throws {
-//        let boardSize = 3
-//        let boardState = BoardStateImpl(moves: [])
-//        let engineRules = EngineRulesImpl(boardState: boardState)
-//        var validationWinnerCells = [BoardCell]()
-//        for i in 0..<boardSize {
-//            let moveBy = PlayerMove(
-//                player: .init(type: .x),
-//                toCell: .init(row: i, column: 0)
-//            )
-//            boardState.addMove(moveBy)
-//            validationWinnerCells.append(moveBy.cell)
-//        }
-//        
-//        let winner = engineRules.getWinner()
-//        XCTAssertNotNil(winner)
-//        XCTAssertEqual(winner.type, .x)
-//        XCTAssertEqual(winner.cells, validationWinnerCells)
-//    }
-//    
-//    func testPlayerHasThreeInAColumn() throws {
-//        let boardSize = 3
-//        let boardState = BoardStateImpl(moves: [])
-//        let engineRules = EngineRulesImpl(boardState: boardState)
-//        var validationWinnerCells = [BoardCell]()
-//        for j in 0..<boardSize {
-//            let moveBy = PlayerMove(
-//                player: .init(
-//                    type: .x
-//                ),
-//                toCell: .init(row: 0, column: j)
-//            )
-//            boardState.addMove(moveBy)
-//            validationWinnerCells.append(moveBy.cell)
-//        }
-//        
-//        let winner = engineRules.getWinner()
-//        XCTAssertNotNil(winner)
-//        XCTAssertEqual(winner.type, .x)
-//        XCTAssertEqual(winner.cells, validationWinnerCells)
-//    }
+    func testPlayerHasThreeInARow() throws {
+        let boardSize = 3
+        let boardState = BoardStateImpl(moves: [])
+        let engineRules = EngineRulesImpl(boardState: boardState)
+        let engine = Engine(boardState: boardState, engineRules: engineRules)
+        var validationWinnerCells = [BoardCell]()
+        for i in 0..<boardSize {
+            let moveBy = PlayerMove(
+                player: .init(type: .x),
+                toCell: .init(row: i, column: 0)
+            )
+            boardState.addMove(moveBy)
+            validationWinnerCells.append(moveBy.cell)
+        }
+        let lastPlayed = boardState.moves.last!
+        let winner = engine.checkWinner(for: lastPlayed.player.type)
+        XCTAssertNotNil(winner)
+        XCTAssertEqual(winner.type, .x)
+        XCTAssertEqual(winner.cells, validationWinnerCells)
+        XCTAssertEqual(winner.rulesResult, .moveSucceeded)
+    }
     
-//    func testPlayerHasThreeInADiagonal() throws {
-//        let boardSize = 3
-//        let boardState = BoardStateImpl(moves: [])
-//        let engineRules = EngineRulesImpl(boardState: boardState)
-//        var validationWinnerCells = [BoardCell]()
-//        for j in 0..<boardSize {
-//            let moveBy = PlayerMove(
-//                player: .init(type: .x),
-//                toCell: .init(row: j, column: j)
-//            )
-//            boardState.addMove(moveBy)
-//            validationWinnerCells.append(moveBy.cell)
-//        }
-//        
-//        let winner = engineRules.getWinner()
-//        XCTAssertNotNil(winner)
-//        XCTAssertEqual(winner.type, .x)
-//        XCTAssertEqual(winner.cells, validationWinnerCells)
-//    }
-//    
-//    func testAllCellsAreFilledAndDrawHappen() throws {
-//        let boardSize = 3
-//        let move1 = PlayerMove(player: .init(type: .x), toCell: .init(row: 0, column: 0))
-//        let move2 = PlayerMove(player: .init(type: .x), toCell: .init(row: 0, column: 1))
-//        let move3 = PlayerMove(player: .init(type: .o), toCell: .init(row: 0, column: 2))
-//        let movesTmp = [move1, move2, move3]
-//        let moves = movesTmp + movesTmp.reversed() + movesTmp
-//        let boardState = BoardStateImpl(moves: moves)
-//        let engineRules = EngineRulesImpl(boardState: boardState)
-//        
-//        let winner = engineRules.getWinner()
-//        XCTAssertNil(winner)
-//    }
+    func testPlayerHasThreeInAColumn() throws {
+        let boardSize = 3
+        let boardState = BoardStateImpl(moves: [])
+        let engineRules = EngineRulesImpl(boardState: boardState)
+        let engine = Engine(boardState: boardState, engineRules: engineRules)
+        var validationWinnerCells = [BoardCell]()
+        for j in 0..<boardSize {
+            let moveBy = PlayerMove(
+                player: .init(type: .x),
+                toCell: .init(row: 0, column: j)
+            )
+            boardState.addMove(moveBy)
+            validationWinnerCells.append(moveBy.cell)
+        }
+        
+        let lastPlayed = boardState.moves.last!
+        let winner = engine.checkWinner(for: lastPlayed.player.type)
+        XCTAssertNotNil(winner)
+        XCTAssertEqual(winner.type, .x)
+        XCTAssertEqual(winner.cells, validationWinnerCells)
+        XCTAssertEqual(winner.rulesResult, .moveSucceeded)
+    }
+    
+    func testPlayerHasThreeInADiagonal() throws {
+        let boardSize = 3
+        let boardState = BoardStateImpl(moves: [])
+        let engineRules = EngineRulesImpl(boardState: boardState)
+        let engine = Engine(boardState: boardState, engineRules: engineRules)
+        var validationWinnerCells = [BoardCell]()
+        for j in 0..<boardSize {
+            let moveBy = PlayerMove(
+                player: .init(type: .x),
+                toCell: .init(row: j, column: j)
+            )
+            boardState.addMove(moveBy)
+            validationWinnerCells.append(moveBy.cell)
+        }
+        
+        let lastPlayed = boardState.moves.last!
+        let winner = engine.checkWinner(for: lastPlayed.player.type)
+        XCTAssertNotNil(winner)
+        XCTAssertEqual(winner.type, .x)
+        XCTAssertEqual(winner.cells, validationWinnerCells)
+        XCTAssertEqual(winner.rulesResult, .moveSucceeded)
+    }
+    
+    func testAllCellsAreFilledAndDrawHappen() throws {
+        let move1 = PlayerMove(player: .init(type: .x), toCell: .init(row: 0, column: 0))
+        let move2 = PlayerMove(player: .init(type: .x), toCell: .init(row: 0, column: 1))
+        let move3 = PlayerMove(player: .init(type: .o), toCell: .init(row: 0, column: 2))
+        let movesTmp = [move1, move2, move3]
+        let moves = movesTmp + movesTmp.reversed() + movesTmp
+        let boardState = BoardStateImpl(moves: moves)
+        let engineRules = EngineRulesImpl(boardState: boardState)
+        let engine = Engine(boardState: boardState, engineRules: engineRules)
+
+        let lastPlayed = boardState.moves.last!
+        let winner = engine.checkWinner(for: lastPlayed.player.type)
+        XCTAssertNotNil(winner)
+        XCTAssertEqual(winner.type, .none)
+        XCTAssertNil(winner.cells)
+        XCTAssertEqual(winner.rulesResult, .moveSucceeded)
+    }
     
     func testBoardIsFull() throws {
         let boardSize = 3
@@ -237,56 +246,64 @@ final class EngineRulesTests: XCTestCase {
         XCTAssertEqual(engineRules.checkMoveIsValid(move: anotherMove), .noMoreMovesAllowedError)
     }
     
-//    func testAllCellsAreFilledAndXPlayerHasWon() throws {
-//        let boardSize = 3
-//        let boardState = BoardStateImpl(moves: [])
-//        let engineRules = EngineRulesImpl(boardState: boardState)
-//        var validationWinnerCells = [BoardCell]()
-//        var alt = true
-//        for i in 0..<boardSize {
-//            for j in 0..<boardSize {
-//                let moveBy = PlayerMove(player: .init(type: alt ? .x : .o), toCell: .init(row: i, column: j))
-//                boardState.addMove(moveBy)
-//                alt = !alt
-//            }
-//        }
-//        validationWinnerCells = [
-//            .init(row: 0, column: 0),
-//            .init(row: 1, column: 1),
-//            .init(row: 2, column: 2),
-//        ]
-//        
-//        let winner = engineRules.getWinner()
-//        XCTAssertNotNil(winner)
-//        XCTAssertEqual(winner.type, .x)
-//        XCTAssertEqual(winner.cells, validationWinnerCells)
-//    }
-//
-//    func testAllCellsAreFilledAndOPlayerHasWon() throws {
-//        let boardSize = 3
-//        let boardState = BoardStateImpl(moves: [])
-//        let engineRules = EngineRulesImpl(boardState: boardState)
-//        var validationWinnerCells = [BoardCell]()
-//        var alt = false
-//        for i in 0..<boardSize {
-//            for j in 0..<boardSize {
-//                let moveBy = PlayerMove(player: .init(type: alt ? .x : .o), toCell: .init(row: i, column: j))
-//                boardState.addMove(moveBy)
-//                alt = !alt
-//            }
-//        }
-//        
-//        validationWinnerCells = [
-//            .init(row: 0, column: 0),
-//            .init(row: 1, column: 1),
-//            .init(row: 2, column: 2),
-//        ]
-//        
-//        let winner = engineRules.getWinner()
-//        XCTAssertNotNil(winner)
-//        XCTAssertEqual(winner.type, .o)
-//        XCTAssertEqual(winner.cells, validationWinnerCells)
-//    }
+    func testAllCellsAreFilledAndXPlayerHasWon() throws {
+        let boardSize = 3
+        let boardState = BoardStateImpl(moves: [])
+        let engineRules = EngineRulesImpl(boardState: boardState)
+        let engine = Engine(boardState: boardState, engineRules: engineRules)
+        var validationWinnerCells = [BoardCell]()
+        var alt = true
+        for i in 0..<boardSize {
+            for j in 0..<boardSize {
+                let moveBy = PlayerMove(player: .init(type: alt ? .x : .o), toCell: .init(row: i, column: j))
+                boardState.addMove(moveBy)
+                alt = !alt
+            }
+        }
+        validationWinnerCells = [
+            .init(row: 0, column: 0),
+            .init(row: 1, column: 1),
+            .init(row: 2, column: 2),
+        ]
+        
+        let nextMove = PlayerMove(player: .init(type: .o), toCell: .init(row: 3, column: 3))
+        
+        let winner = engine.makeMove(by: nextMove)
+        XCTAssertNotNil(winner)
+        XCTAssertEqual(winner.type, .x)
+        XCTAssertEqual(winner.cells, validationWinnerCells)
+        XCTAssertEqual(winner.rulesResult, .moveSucceeded)
+    }
+
+    func testAllCellsAreFilledAndOPlayerHasWon() throws {
+        let boardSize = 3
+        let boardState = BoardStateImpl(moves: [])
+        let engineRules = EngineRulesImpl(boardState: boardState)
+        let engine = Engine(boardState: boardState, engineRules: engineRules)
+        var validationWinnerCells = [BoardCell]()
+        var alt = false
+        for i in 0..<boardSize {
+            for j in 0..<boardSize {
+                let moveBy = PlayerMove(player: .init(type: alt ? .x : .o), toCell: .init(row: i, column: j))
+                boardState.addMove(moveBy)
+                alt = !alt
+            }
+        }
+        
+        validationWinnerCells = [
+            .init(row: 0, column: 0),
+            .init(row: 1, column: 1),
+            .init(row: 2, column: 2),
+        ]
+        
+        let nextMove = PlayerMove(player: .init(type: .x), toCell: .init(row: 3, column: 3))
+        
+        let winner = engine.makeMove(by: nextMove)
+        XCTAssertNotNil(winner)
+        XCTAssertEqual(winner.type, .o)
+        XCTAssertEqual(winner.cells, validationWinnerCells)
+        XCTAssertEqual(winner.rulesResult, .moveSucceeded)
+    }
 
     
 }
