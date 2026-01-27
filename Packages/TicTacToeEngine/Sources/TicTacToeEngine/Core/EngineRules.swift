@@ -33,6 +33,10 @@ struct EngineRulesImpl: EngineRules {
             return .mustAlternateTurnsError
         }
         
+        guard !noMoreMovesAllowed() else {
+            return .noMoreMovesAllowedError
+        }
+        
         return .moveSucceeded
     }
 }
@@ -59,5 +63,9 @@ extension EngineRulesImpl {
             return true
         }
         return lastMove.player.type != move.player.type
+    }
+    
+    private func noMoreMovesAllowed() -> Bool {
+        boardState.moves.count >= BOARD_SIZE * BOARD_SIZE
     }
 }

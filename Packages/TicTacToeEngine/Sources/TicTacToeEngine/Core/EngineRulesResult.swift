@@ -10,5 +10,5 @@ enum EngineRulesResult {
     case onlyXMustStartError
     case cellIsAlreadyTakenError
     case mustAlternateTurnsError
-    case invalidMoveError
+    case noMoreMovesAllowedError
 }
