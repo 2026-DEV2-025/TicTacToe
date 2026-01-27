@@ -88,7 +88,7 @@ final class EngineRulesTests: XCTestCase {
         XCTAssertEqual(engineRules.checkMoveIsValid(move: moveByO), .moveSucceeded)
     }
     
-    //MARK: Alternating moves by players tests
+    //MARK: - Alternating moves by players tests
     
     func testPlayersAlternatingEachOtherFullBoard() throws {
         let boardSize = 3
@@ -127,6 +127,10 @@ final class EngineRulesTests: XCTestCase {
         var alt = true
         for i in 0..<boardSize {
             for j in 0..<boardSize {
+                if i == 0 && j == 0 {
+                    //skipping here, otherwise we will get already taken error
+                    continue
+                }
                 let moveBy = PlayerMove(player: .init(type: alt ? .x : .o), toCell: .init(row: i, column: j))
                 XCTAssertEqual(engineRules.checkMoveIsValid(move: moveBy), .moveSucceeded)
                 boardState.addMove(moveBy)
