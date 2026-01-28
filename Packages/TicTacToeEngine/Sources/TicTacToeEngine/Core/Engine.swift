@@ -53,14 +53,14 @@ class Engine {
 private extension Engine {
     func checkRows(for type: PlayerType) -> [BoardCell]? {
         let cells = boardState.getCells(for: type)
-        return winningLine(in: cells)
+        return winningLine(in: cells, lineLength: boardState.boardSize)
     }
     
     func checkColumns(for type: PlayerType) -> [BoardCell]? {
         guard let cells = boardState.getCells(for: type).transposed() else {
             return nil
         }
-        return winningLine(in: cells)
+        return winningLine(in: cells, lineLength: boardState.boardSize)
     }
     
     func checkDiagonals(for type: PlayerType) -> [BoardCell]? {
@@ -71,16 +71,14 @@ private extension Engine {
             return nil
         }
         
-        if let line = winningLine(in: cellsDiagonal) {
+        if let line = winningLine(in: cellsDiagonal, lineLength: boardState.boardSize) {
             return line
         }
         
-        return winningLine(in: cellsAntiDiagonal)
+        return winningLine(in: cellsAntiDiagonal, lineLength: boardState.boardSize)
     }
     
-    
-    func winningLine(in cells: [BoardCell?]) -> [BoardCell]? {
-        let lineLength = BOARD_SIZE
+    func winningLine(in cells: [BoardCell?], lineLength: Int) -> [BoardCell]? {
         var winningLine = [BoardCell]()
         for (i, cell) in cells.enumerated() {
             if i % lineLength == 0  {
@@ -94,7 +92,7 @@ private extension Engine {
 
             winningLine.append(cell)
             
-            if winningLine.count == BOARD_SIZE {
+            if winningLine.count == lineLength {
                 return winningLine
             }
         }

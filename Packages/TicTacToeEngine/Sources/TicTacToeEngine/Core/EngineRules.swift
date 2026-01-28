@@ -66,6 +66,6 @@ extension EngineRulesImpl {
     }
     
     private func noMoreMovesAllowed() -> Bool {
-        boardState.moves.count >= BOARD_SIZE * BOARD_SIZE
+        boardState.moves.count >= boardState.boardSize * boardState.boardSize
     }
 }

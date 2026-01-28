@@ -15,7 +15,7 @@ final class EngineRulesTests: XCTestCase {
     //MARK: - X always goes first tests
     
     func testXGoesFirst() throws {
-        let boardState = BoardStateImpl(moves: [])
+        let boardState = BoardStateImpl(moves: [], boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
         let moveByX = PlayerMove(player: .init(type: .x), toCell: .init(row: 0, column: 0))
         
@@ -23,7 +23,7 @@ final class EngineRulesTests: XCTestCase {
     }
     
     func testOGoesFirst() throws {
-        let boardState = BoardStateImpl(moves: [])
+        let boardState = BoardStateImpl(moves: [], boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
         let moveByO = PlayerMove(player: .init(type: .o), toCell: .init(row: 0, column: 0))
         
@@ -32,7 +32,7 @@ final class EngineRulesTests: XCTestCase {
 
     func testOCanMoveAfterFirstMove() throws {
         let firstMoveByX = PlayerMove(player: .init(type: .x), toCell: .init(row: 0, column: 0))
-        let boardState = BoardStateImpl(moves: [firstMoveByX])
+        let boardState = BoardStateImpl(moves: [firstMoveByX], boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
         let moveByO = PlayerMove(player: .init(type: .o), toCell: .init(row: 0, column: 1))
         
@@ -45,7 +45,7 @@ final class EngineRulesTests: XCTestCase {
         let cell = BoardCell(row: 0, column: 0)
 
         let moveByX = PlayerMove(player: .init(type: .x), toCell: cell)
-        let boardState = BoardStateImpl(moves: [moveByX])
+        let boardState = BoardStateImpl(moves: [moveByX], boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
         
         let moveByO = PlayerMove(player: .init(type: .o), toCell: cell)
@@ -56,7 +56,7 @@ final class EngineRulesTests: XCTestCase {
         let cell = BoardCell(row: 0, column: 0)
 
         let moveByX = PlayerMove(player: .init(type: .x), toCell: cell)
-        let boardState = BoardStateImpl(moves: [moveByX])
+        let boardState = BoardStateImpl(moves: [moveByX], boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
         
         let secondMoveByX = PlayerMove(player: .init(type: .x), toCell: cell)
@@ -69,7 +69,7 @@ final class EngineRulesTests: XCTestCase {
 
         let moveByX = PlayerMove(player: .init(type: .x), toCell: occupiedCell)
         let moveByO = PlayerMove(player: .init(type: .o), toCell: otherCell)
-        let boardState = BoardStateImpl(moves: [moveByX, moveByO])
+        let boardState = BoardStateImpl(moves: [moveByX, moveByO], boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
         
         let moveByXOnTakenCell = PlayerMove(player: .init(type: .x), toCell: occupiedCell)
@@ -81,7 +81,7 @@ final class EngineRulesTests: XCTestCase {
         let emptyCell = BoardCell(row: 0, column: 1)
 
         let moveByX = PlayerMove(player: .init(type: .x), toCell: takenCell)
-        let boardState = BoardStateImpl(moves: [moveByX])
+        let boardState = BoardStateImpl(moves: [moveByX], boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
         
         let moveByO = PlayerMove(player: .init(type: .o), toCell: emptyCell)
@@ -91,12 +91,11 @@ final class EngineRulesTests: XCTestCase {
     //MARK: - Alternating moves by players tests
     
     func testPlayersAlternatingEachOtherFullBoard() throws {
-        let boardSize = 3
-        let boardState = BoardStateImpl(moves: [])
+        let boardState = BoardStateImpl(moves: [], boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
         var alt = true
-        for i in 0..<boardSize {
-            for j in 0..<boardSize {
+        for i in 0..<boardState.boardSize {
+            for j in 0..<boardState.boardSize {
                 let moveBy = PlayerMove(player: .init(type: alt ? .x : .o), toCell: .init(row: i, column: j))
                 XCTAssertEqual(engineRules.checkMoveIsValid(move: moveBy), .moveSucceeded)
                 boardState.addMove(moveBy)
@@ -106,12 +105,11 @@ final class EngineRulesTests: XCTestCase {
     }
 
     func testAlternatingPlayersWithSameTypeX() throws {
-        let boardSize = 3
         let firstMove = PlayerMove(player: .init(type: .x), toCell: .init(row: 0, column: 0))
-        let boardState = BoardStateImpl(moves: [firstMove])
+        let boardState = BoardStateImpl(moves: [firstMove], boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
-        for i in 1..<boardSize {
-            for j in 0..<boardSize {
+        for i in 1..<boardState.boardSize {
+            for j in 0..<boardState.boardSize {
                 let moveBy = PlayerMove(player: .init(type: .x), toCell: .init(row: i, column: j))
                 XCTAssertEqual(engineRules.checkMoveIsValid(move: moveBy), .mustAlternateTurnsError)
                 boardState.addMove(moveBy)
@@ -120,13 +118,12 @@ final class EngineRulesTests: XCTestCase {
     }
     
     func testAlternatingPlayersWithSameTypeO() throws {
-        let boardSize = 3
         let firstMove = PlayerMove(player: .init(type: .o), toCell: .init(row: 0, column: 0))
-        let boardState = BoardStateImpl(moves: [firstMove])
+        let boardState = BoardStateImpl(moves: [firstMove], boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
         var alt = true
-        for i in 0..<boardSize {
-            for j in 0..<boardSize {
+        for i in 0..<boardState.boardSize {
+            for j in 0..<boardState.boardSize {
                 if i == 0 && j == 0 {
                     //skipping here, otherwise we will get already taken error
                     continue
@@ -142,12 +139,11 @@ final class EngineRulesTests: XCTestCase {
     //MARK: - Finishing the game
     
     func testPlayerHasThreeInARow() throws {
-        let boardSize = 3
-        let boardState = BoardStateImpl(moves: [])
+        let boardState = BoardStateImpl(moves: [], boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
         let engine = Engine(boardState: boardState, engineRules: engineRules)
         var validationWinnerCells = [BoardCell]()
-        for i in 0..<boardSize {
+        for i in 0..<boardState.boardSize {
             let moveBy = PlayerMove(
                 player: .init(type: .x),
                 toCell: .init(row: 0, column: i)
@@ -162,14 +158,13 @@ final class EngineRulesTests: XCTestCase {
         XCTAssertEqual(winner.cells, validationWinnerCells)
         XCTAssertEqual(winner.rulesResult, .moveSucceeded)
     }
-    
+        
     func testPlayerHasThreeInAColumn() throws {
-        let boardSize = 3
-        let boardState = BoardStateImpl(moves: [])
+        let boardState = BoardStateImpl(moves: [], boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
         let engine = Engine(boardState: boardState, engineRules: engineRules)
         var validationWinnerCells = [BoardCell?]()
-        for j in 0..<boardSize {
+        for j in 0..<boardState.boardSize {
             let moveBy = PlayerMove(
                 player: .init(type: .x),
                 toCell: .init(row: j, column: 0)
@@ -179,7 +174,32 @@ final class EngineRulesTests: XCTestCase {
         }
         
         //adding padding so column will be transposed correctly for the validation
-        validationWinnerCells.append(contentsOf: Array(repeating: nil, count: boardSize * boardSize - 3))
+        validationWinnerCells.append(contentsOf: Array(repeating: nil, count: boardState.boardSize * boardState.boardSize - 3))
+        
+        let lastPlayed = boardState.moves.last!
+        let winner = engine.checkWinner(for: lastPlayed.player.type)
+        XCTAssertNotNil(winner)
+        XCTAssertEqual(winner.type, .x)
+        XCTAssertEqual(winner.cells, validationWinnerCells.transposed()!.compactMap { $0 })
+        XCTAssertEqual(winner.rulesResult, .moveSucceeded)
+    }
+    
+    func testPlayerHasWinnerInAColumn() throws {
+        let boardState = BoardStateImpl(moves: [], boardSize: 10)
+        let engineRules = EngineRulesImpl(boardState: boardState)
+        let engine = Engine(boardState: boardState, engineRules: engineRules)
+        var validationWinnerCells = [BoardCell?]()
+        for j in 0..<boardState.boardSize {
+            let moveBy = PlayerMove(
+                player: .init(type: .x),
+                toCell: .init(row: j, column: 0)
+            )
+            boardState.addMove(moveBy)
+            validationWinnerCells.append(moveBy.cell)
+        }
+        
+        //adding padding so column will be transposed correctly for the validation
+        validationWinnerCells.append(contentsOf: Array(repeating: nil, count: boardState.boardSize * boardState.boardSize - boardState.boardSize))
         
         let lastPlayed = boardState.moves.last!
         let winner = engine.checkWinner(for: lastPlayed.player.type)
@@ -190,12 +210,11 @@ final class EngineRulesTests: XCTestCase {
     }
     
     func testPlayerHasThreeInADiagonal() throws {
-        let boardSize = 3
-        let boardState = BoardStateImpl(moves: [])
+        let boardState = BoardStateImpl(moves: [], boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
         let engine = Engine(boardState: boardState, engineRules: engineRules)
         var validationWinnerCells = [BoardCell]()
-        for j in 0..<boardSize {
+        for j in 0..<boardState.boardSize {
             let moveBy = PlayerMove(
                 player: .init(type: .x),
                 toCell: .init(row: j, column: j)
@@ -218,7 +237,7 @@ final class EngineRulesTests: XCTestCase {
         let move3 = PlayerMove(player: .init(type: .o), toCell: .init(row: 0, column: 2))
         let movesTmp = [move1, move2, move3]
         let moves = movesTmp + movesTmp.reversed() + movesTmp
-        let boardState = BoardStateImpl(moves: moves)
+        let boardState = BoardStateImpl(moves: moves, boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
         let engine = Engine(boardState: boardState, engineRules: engineRules)
 
@@ -231,13 +250,12 @@ final class EngineRulesTests: XCTestCase {
     }
     
     func testBoardIsFull() throws {
-        let boardSize = 3
-        let boardState = BoardStateImpl(moves: [])
+        let boardState = BoardStateImpl(moves: [], boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
         
         var alt = true
-        for i in 0..<boardSize {
-            for j in 0..<boardSize {
+        for i in 0..<boardState.boardSize {
+            for j in 0..<boardState.boardSize {
                 let moveBy = PlayerMove(
                     player: .init(
                         type: alt ? .x : .o
@@ -254,14 +272,13 @@ final class EngineRulesTests: XCTestCase {
     }
     
     func testAllCellsAreFilledAndXPlayerHasWon() throws {
-        let boardSize = 3
-        let boardState = BoardStateImpl(moves: [])
+        let boardState = BoardStateImpl(moves: [], boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
         let engine = Engine(boardState: boardState, engineRules: engineRules)
         var validationWinnerCells = [BoardCell]()
         var alt = true
-        for i in 0..<boardSize {
-            for j in 0..<boardSize {
+        for i in 0..<boardState.boardSize {
+            for j in 0..<boardState.boardSize {
                 let moveBy = PlayerMove(player: .init(type: alt ? .x : .o), toCell: .init(row: i, column: j))
                 boardState.addMove(moveBy)
                 alt = !alt
@@ -283,14 +300,13 @@ final class EngineRulesTests: XCTestCase {
     }
 
     func testAllCellsAreFilledAndOPlayerHasWon() throws {
-        let boardSize = 3
-        let boardState = BoardStateImpl(moves: [])
+        let boardState = BoardStateImpl(moves: [], boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
         let engine = Engine(boardState: boardState, engineRules: engineRules)
         var validationWinnerCells = [BoardCell]()
         var alt = false
-        for i in 0..<boardSize {
-            for j in 0..<boardSize {
+        for i in 0..<boardState.boardSize {
+            for j in 0..<boardState.boardSize {
                 let moveBy = PlayerMove(player: .init(type: alt ? .x : .o), toCell: .init(row: i, column: j))
                 boardState.addMove(moveBy)
                 alt = !alt
