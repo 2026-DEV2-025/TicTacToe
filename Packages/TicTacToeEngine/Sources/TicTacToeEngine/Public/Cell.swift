@@ -25,10 +25,10 @@ public final class Cell: Equatable {
 
 extension Cell {
     internal var asBoardCell: BoardCell {
-        BoardCell(row: row, column: column)
+        BoardCell(type: mark.asCellMarkType, toCell: .init(row: row, column: column))
     }
 
-    internal convenience init(boardCell: BoardCell, mark: Mark) {
-        self.init(row: boardCell.row, column: boardCell.column, mark: mark)
+    internal convenience init(boardCell: BoardCell) {
+        self.init(row: boardCell.cell.row, column: boardCell.cell.column, mark: boardCell.type.asMark)
     }
 }

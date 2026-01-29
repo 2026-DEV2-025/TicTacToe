@@ -10,7 +10,7 @@ public enum Mark {
 }
 
 internal extension Mark {
-    var asPlayerType: PlayerType {
+    var asCellMarkType: CellMarkType {
         switch self {
         case .x:
             return .x

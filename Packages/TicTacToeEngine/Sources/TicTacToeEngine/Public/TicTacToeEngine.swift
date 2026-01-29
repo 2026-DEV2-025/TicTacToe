@@ -20,30 +20,18 @@ public final class TicTacToeEngine {
         )
     }
 
+    @discardableResult
     public func makeMove(mark: Mark, cell: Cell) -> MovingResult {
-        let move = PlayerMove(
-            player: .init(type: mark.asPlayerType),
-            toCell: cell.asBoardCell
+        let boardCell = BoardCell(
+            type: mark.asCellMarkType,
+            toCell: .init(row: cell.row, column: cell.column)
         )
-        let engineResult = engine.makeMove(by: move)
-        
+        let engineResult = engine.makeMove(by: boardCell)
         return toMovingResult(engineResult)
     }
 
     public func boardCells() -> [Cell] {
-        var occupants = Array(repeating: PlayerType.none, count: boardSize * boardSize)
-        for move in boardState.moves {
-            let index = (move.cell.row * boardSize) + move.cell.column
-            if index >= 0 && index < occupants.count {
-                occupants[index] = move.player.type
-            }
-        }
-
-        return occupants.enumerated().map { index, playerType in
-            let row = index / boardSize
-            let column = index % boardSize
-            return Cell(row: row, column: column, mark: playerType.asMark)
-        }
+        engine.boardCells().map({ .init(boardCell: $0) })
     }
 
     public func reset() {
@@ -60,7 +48,7 @@ private extension TicTacToeEngine {
         return MovingResult(
             mark: result.winningMark.asMark,
             cells: result.winningCells?.map {
-                Cell(boardCell: $0, mark: result.winningMark.asMark)
+                Cell.init(row: $0.row, column: $0.column)
             },
             rulesResult: toRulesResult(result),
             winningResult: toWinResult(result)
