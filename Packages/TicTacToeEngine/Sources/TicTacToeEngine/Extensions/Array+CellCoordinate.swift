@@ -7,25 +7,25 @@
 
 import Foundation
 
-extension Array where Element == BoardCell? {
-    func transposed() -> [BoardCell?]? {
+extension Array where Element == CellCoordinate? {
+    func transposed() -> [CellCoordinate?]? {
         let boardSide = Int(Double(count).squareRoot())
         guard boardSide * boardSide == count else {
             return nil
         }
 
-        var padded = Array<BoardCell?>(repeating: nil, count: count)
+        var padded = Array<CellCoordinate?>(repeating: nil, count: count)
         for index in 0..<Swift.min(self.count, count) {
             padded[index] = self[index]
         }
 
-        var transposed = Array<BoardCell?>(repeating: nil, count: count)
+        var transposed = Array<CellCoordinate?>(repeating: nil, count: count)
         for row in 0..<boardSide {
             for col in 0..<boardSide {
                 let sourceIndex = row * boardSide + col
                 let targetIndex = col * boardSide + row
                 if let cell = padded[sourceIndex] {
-                    transposed[targetIndex] = BoardCell(row: cell.column, column: cell.row)
+                    transposed[targetIndex] = CellCoordinate(row: cell.column, column: cell.row)
                 } else {
                     transposed[targetIndex] = nil
                 }
@@ -34,24 +34,24 @@ extension Array where Element == BoardCell? {
         return transposed
     }
     
-    func diagonalTopLeftToBottomRight() -> [BoardCell?]? {
+    func diagonalTopLeftToBottomRight() -> [CellCoordinate?]? {
         let size = Int(Double(count).squareRoot())
         guard size * size == count else {
             return nil
         }
-        var diagonal: [BoardCell?] = []
+        var diagonal: [CellCoordinate?] = []
         for i in 0..<size {
             diagonal.append(self[i * size + i])
         }
         return diagonal
     }
     
-    func diagonalTopRightToBottomLeft() -> [BoardCell?]? {
+    func diagonalTopRightToBottomLeft() -> [CellCoordinate?]? {
         let size = Int(Double(count).squareRoot())
         guard size * size == count else {
             return nil
         }
-        var diagonal: [BoardCell?] = []
+        var diagonal: [CellCoordinate?] = []
         for i in 0..<size {
             diagonal.append(self[i * size + (size - 1 - i)])
         }

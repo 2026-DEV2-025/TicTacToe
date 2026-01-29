@@ -7,11 +7,11 @@
 
 
 struct EngineResult {
-    let winningMark: PlayerType
-    let winningCells: [BoardCell]?
+    let winningMark: CellMarkType
+    let winningCells: [CellCoordinate]?
     let rulesResult: EngineRulesResult
     
-    init(winningMark: PlayerType, winningCells: [BoardCell]?, rulesResult: EngineRulesResult) {
+    init(winningMark: CellMarkType, winningCells: [CellCoordinate]?, rulesResult: EngineRulesResult) {
         self.winningMark = winningMark
         self.winningCells = winningCells
         self.rulesResult = rulesResult

@@ -1,10 +1,10 @@
 //
-//  PlayerType.swift
+//  CellMarkType.swift
 //  TicTacToeEngine
 //
 //  Created by 2026-DEV2-025 on 26/01/2026.
 //
 
-enum PlayerType {
+enum CellMarkType {
     case x, o, none
 }

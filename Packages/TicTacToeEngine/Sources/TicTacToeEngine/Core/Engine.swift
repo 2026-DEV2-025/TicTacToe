@@ -15,12 +15,12 @@ class Engine {
         self.engineRules = engineRules
     }
     
-    func makeMove(by move:PlayerMove) -> EngineResult {
+    func makeMove(by move:BoardCell) -> EngineResult {
         let rulesResult = engineRules.checkMoveIsValid(move:move)
         
         if rulesResult == .noMoreMovesAllowedError {
-            let lastPlayerMove = boardState.moves.last!
-            if let winnerResult = checkWinner(for: lastPlayerMove.player.type) {
+            let lastBoardCell = boardState.moves.last!
+            if let winnerResult = checkWinner(for: lastBoardCell.type) {
                 return winnerResult
             } else {
                 return .init(winningMark: .none, winningCells: nil, rulesResult: .draw)
@@ -28,12 +28,12 @@ class Engine {
         }
         
         if rulesResult != .moveSucceeded {
-            return .init(winningMark: move.player.type, winningCells: nil, rulesResult: rulesResult)
+            return .init(winningMark: move.type, winningCells: nil, rulesResult: rulesResult)
         }
         
         boardState.addMove(move)
         
-        if let winResult = checkWinner(for: move.player.type) {
+        if let winResult = checkWinner(for: move.type) {
             return winResult
         }
         
@@ -44,7 +44,7 @@ class Engine {
         return .init(winningMark: .none, winningCells: nil, rulesResult: .moveSucceeded)
     }
     
-    func checkWinner(for type: PlayerType) -> EngineResult? {
+    func checkWinner(for type: CellMarkType) -> EngineResult? {
         
         if let rows = checkRows(for: type) {
             return .init(winningMark: type, winningCells: rows, rulesResult: .winning)
@@ -62,25 +62,25 @@ class Engine {
     }
 
     //fixme: probably no need
-    func boardCells(for type: PlayerType) -> [BoardCell?] {
+    func boardCells(for type: CellMarkType) -> [CellCoordinate?] {
         boardState.getCells(for: type)
     }
 }
 
 private extension Engine {
-    func checkRows(for type: PlayerType) -> [BoardCell]? {
+    func checkRows(for type: CellMarkType) -> [CellCoordinate]? {
         let cells = boardState.getCells(for: type)
         return winningLine(in: cells, lineLength: boardState.boardSize)
     }
     
-    func checkColumns(for type: PlayerType) -> [BoardCell]? {
+    func checkColumns(for type: CellMarkType) -> [CellCoordinate]? {
         guard let cells = boardState.getCells(for: type).transposed() else {
             return nil
         }
         return winningLine(in: cells, lineLength: boardState.boardSize)
     }
     
-    func checkDiagonals(for type: PlayerType) -> [BoardCell]? {
+    func checkDiagonals(for type: CellMarkType) -> [CellCoordinate]? {
         guard
             let cellsDiagonal = boardState.getCells(for: type).diagonalTopLeftToBottomRight(),
             let cellsAntiDiagonal = boardState.getCells(for: type).diagonalTopRightToBottomLeft()
@@ -95,8 +95,8 @@ private extension Engine {
         return winningLine(in: cellsAntiDiagonal, lineLength: boardState.boardSize)
     }
     
-    func winningLine(in cells: [BoardCell?], lineLength: Int) -> [BoardCell]? {
-        var winningLine = [BoardCell]()
+    func winningLine(in cells: [CellCoordinate?], lineLength: Int) -> [CellCoordinate]? {
+        var winningLine = [CellCoordinate]()
         for (i, cell) in cells.enumerated() {
             if i % lineLength == 0  {
                 winningLine.removeAll()

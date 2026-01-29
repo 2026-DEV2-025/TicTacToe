@@ -6,13 +6,13 @@
 //
 
 protocol EngineRules {
-    func checkMoveIsValid(move: PlayerMove) -> EngineRulesResult
+    func checkMoveIsValid(move: BoardCell) -> EngineRulesResult
 }
 
 struct EngineRulesImpl: EngineRules {
     let boardState: BoardState
     
-    var lastMove: PlayerMove? {
+    var lastMove: BoardCell? {
         boardState.moves.last
     }
         
@@ -20,7 +20,7 @@ struct EngineRulesImpl: EngineRules {
         self.boardState = boardState
     }
     
-    func checkMoveIsValid(move: PlayerMove) -> EngineRulesResult {
+    func checkMoveIsValid(move: BoardCell) -> EngineRulesResult {
         guard checkFirstMove(for: move) else {
             return .onlyXMustStartError
         }
@@ -42,27 +42,27 @@ struct EngineRulesImpl: EngineRules {
 }
 
 extension EngineRulesImpl {
-    private func checkFirstMove(for move: PlayerMove) -> Bool {
+    private func checkFirstMove(for move: BoardCell) -> Bool {
         if boardState.moves.count == 0 {
-            if move.player.type != .x {
+            if move.type != .x {
                 return false
             }
         }
         return true
     }
     
-    private func alreadyPlayedPosition(for move: PlayerMove) -> Bool {
+    private func alreadyPlayedPosition(for move: BoardCell) -> Bool {
         if boardState.moves.contains(where: { $0.cell == move.cell }) {
             return true
         }
         return false
     }
     
-    private func isAlternatePlayer(for move: PlayerMove) -> Bool {
+    private func isAlternatePlayer(for move: BoardCell) -> Bool {
         guard let lastMove else {
             return true
         }
-        return lastMove.player.type != move.player.type
+        return lastMove.type != move.type
     }
     
     private func noMoreMovesAllowed() -> Bool {
