@@ -85,7 +85,10 @@ private extension Engine {
         guard let cells = cellsForType(type).transposed() else {
             return nil
         }
-        return winningLine(in: cells, lineLength: boardState.boardSize)
+        guard let line = winningLine(in: cells, lineLength: boardState.boardSize) else {
+            return nil
+        }
+        return line.map { CellCoordinate(row: $0.column, column: $0.row) }
     }
     
     func checkDiagonals(for type: CellMarkType) -> [CellCoordinate]? {

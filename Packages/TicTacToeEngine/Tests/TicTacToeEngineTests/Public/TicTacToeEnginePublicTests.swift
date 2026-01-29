@@ -75,6 +75,28 @@ final class TicTacToeEnginePublicTests: XCTestCase {
             Cell(row: 0, column: 2)
         ])
     }
+    
+    func testWinningColumnInTheCentero() {
+        let engine = TicTacToeEngine()
+
+        engine.makeMove(mark: .x, cell: Cell(row: 0, column: 1))
+        engine.makeMove(mark: .o, cell: Cell(row: 1, column: 0))
+        engine.makeMove(mark: .x, cell: Cell(row: 1, column: 1))
+        engine.makeMove(mark: .o, cell: Cell(row: 1, column: 2))
+        engine.makeMove(mark: .x, cell: Cell(row: 2, column: 1))
+
+        let result = engine.makeMove(mark: .x, cell: Cell(row: 0, column: 2))
+
+        XCTAssertEqual(result.winningResult, .win)
+        XCTAssertEqual(result.rulesResult, .moveSucceeded)
+        XCTAssertEqual(result.mark, .x)
+        XCTAssertEqual(result.cells, [
+            Cell(row: 0, column: 1),
+            Cell(row: 1, column: 1),
+            Cell(row: 2, column: 1)
+        ])
+    }
+
 
     func testDrawResultOnFinalMove() {
         let engine = TicTacToeEngine()
