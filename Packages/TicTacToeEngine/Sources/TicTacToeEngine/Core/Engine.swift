@@ -5,7 +5,6 @@
 //  Created by 2026-DEV2-025 on 26/01/2026.
 //
 
-
 class Engine {
     private let boardState: BoardState
     private let engineRules: EngineRules
@@ -49,11 +48,11 @@ class Engine {
         if let rows = checkRows(for: type) {
             return .init(winningMark: type, winningCells: rows, rulesResult: .winning)
         }
-
+        
         if let columns = checkColumns(for: type)  {
             return .init(winningMark: type, winningCells: columns, rulesResult: .winning)
         }
-                
+        
         if let diagonal = checkDiagonals(for: type) {
             return .init(winningMark: type, winningCells: diagonal, rulesResult: .winning)
         }
@@ -111,7 +110,7 @@ private extension Engine {
                 winningLine.removeAll()
                 continue
             }
-
+            
             winningLine.append(cell)
             
             if winningLine.count == lineLength {

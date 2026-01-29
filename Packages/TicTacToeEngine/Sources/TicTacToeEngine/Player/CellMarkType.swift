@@ -7,4 +7,12 @@
 
 enum CellMarkType {
     case x, o, none
+    
+    var asMark: Mark {
+        switch self {
+        case .x: return .x
+        case .o: return .o
+        case .none: return .none
+        }
+    }
 }
