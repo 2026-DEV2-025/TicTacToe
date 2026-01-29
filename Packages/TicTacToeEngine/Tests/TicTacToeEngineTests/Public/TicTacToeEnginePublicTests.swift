@@ -98,13 +98,46 @@ final class TicTacToeEnginePublicTests: XCTestCase {
 
     func testResetClearsBoardState() {
         let engine = TicTacToeEngine()
-
-        _ = engine.makeMove(mark: .x, cell: Cell(row: 0, column: 0))
+        engine.makeMove(mark: .x, cell: Cell(row: 0, column: 0))
         engine.reset()
 
         let cells = engine.boardCells()
         XCTAssertEqual(cells.count, 9)
         XCTAssertEqual(cell(in: cells, row: 0, column: 0)?.mark, Mark.none)
+    }
+
+    func testCurrentMarkReturnsLastPlayedCell() {
+        let engine = TicTacToeEngine()
+        XCTAssertNil(engine.currentMark())
+
+        engine.makeMove(mark: .x, cell: Cell(row: 2, column: 1))
+        let current = engine.currentMark()
+
+        XCTAssertEqual(current?.row, 2)
+        XCTAssertEqual(current?.column, 1)
+        XCTAssertEqual(current?.mark, .x)
+    }
+
+    func testEmptyCellsInitialAndAfterMoves() {
+        let engine = TicTacToeEngine()
+        XCTAssertEqual(engine.emptyCells().count, 9)
+
+        engine.makeMove(mark: .x, cell: Cell(row: 0, column: 0))
+        engine.makeMove(mark: .o, cell: Cell(row: 1, column: 1))
+
+        let emptyCells = engine.emptyCells()
+        XCTAssertEqual(emptyCells.count, 7)
+        XCTAssertNil(cell(in: emptyCells, row: 0, column: 0))
+        XCTAssertNil(cell(in: emptyCells, row: 1, column: 1))
+        XCTAssertEqual(cell(in: emptyCells, row: 2, column: 2)?.mark, Mark.none)
+    }
+
+    func testIsCellAvailable() {
+        let engine = TicTacToeEngine()
+        XCTAssertTrue(engine.isCellAvailable(Cell(row: 0, column: 0)))
+        engine.makeMove(mark: .x, cell: Cell(row: 0, column: 0))
+        XCTAssertFalse(engine.isCellAvailable(Cell(row: 0, column: 0)))
+        XCTAssertTrue(engine.isCellAvailable(Cell(row: 0, column: 1)))
     }
 }
 

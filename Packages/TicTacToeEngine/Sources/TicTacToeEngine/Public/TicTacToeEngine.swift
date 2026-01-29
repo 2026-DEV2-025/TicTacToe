@@ -41,6 +41,23 @@ public final class TicTacToeEngine {
             engineRules: EngineRulesImpl(boardState: boardState)
         )
     }
+    
+    public func currentMark() -> Cell? {
+        guard let lastPlayedMove = boardState.lastPlayedMove else {
+            return nil
+        }
+        return .init(boardCell: lastPlayedMove)
+    }
+    
+    public func emptyCells() -> [Cell] {
+        return engine.emptyCells().map({ Cell(boardCell: $0) })
+    }
+    
+    public func isCellAvailable(_ cell: Cell) -> Bool {
+        return engine.emptyCells().first(where: {
+            $0.cell.row == cell.row && $0.cell.column == cell.column
+        }) != nil
+    }
 }
 
 private extension TicTacToeEngine {

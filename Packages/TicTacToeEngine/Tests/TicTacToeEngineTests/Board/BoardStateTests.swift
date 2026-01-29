@@ -71,6 +71,24 @@ final class BoardStateTests: XCTestCase {
         XCTAssertEqual(allCells, validationCells)
     }
 
+    func testGetCellsForNoneReturnsAllNones() {
+        let moves: [BoardCell] = [
+            .init(type: .x, toCell: .init(row: 0, column: 0)),
+            .init(type: .o, toCell: .init(row: 0, column: 1)),
+        ]
+        let boardState = BoardStateImpl(moves: moves, boardSize: 2)
+
+        let emptyCells = boardState.getCells(for: CellMarkType.none)
+        let validationCells: [BoardCell] = [
+            .init(type: .none, toCell: .init(row: 0, column: 0)),
+            .init(type: .none, toCell: .init(row: 0, column: 1)),
+            .init(type: .none, toCell: .init(row: 1, column: 0)),
+            .init(type: .none, toCell: .init(row: 1, column: 1)),
+        ]
+
+        XCTAssertEqual(emptyCells, validationCells)
+    }
+
     func testBoardIsFullWhenAllCellsOccupied() {
         let moves: [BoardCell] = [
             .init(type: .x, toCell: .init(row: 0, column: 0)),

@@ -49,23 +49,28 @@ final class BoardStateImpl: BoardState {
         var boardCells: [BoardCell] = []
         for i in 0..<boardSize {
             for j in 0..<boardSize {
-                let boardCellInMoves = moves.first { move in
-                    guard move.cell.row == i && move.cell.column == j else {
-                        return false
-                    }
-                    guard let type else {
-                        return true
-                    }
-                    return move.type == type
-                }
-                if let boardCellInMoves {
-                    boardCells.append(boardCellInMoves)
+
+                if let cell = moves.first(where: { $0.cell.row == i && $0.cell.column == j }) {
+                    boardCells.append(cell)
                 } else {
                     boardCells.append(.init(type: .none, toCell: .init(row: i, column: j)))
                 }
             }
         }
-        return boardCells
+        
+        guard type != nil else {
+            return boardCells
+        }
+        
+        let filtered = boardCells.map { boardCell in
+            if boardCell.type == type {
+                return boardCell
+            } else {
+                return .init(type: .none, toCell: boardCell.cell)
+            }
+        }
+        
+        return filtered
     }
 
     func prettyPrintCells() {

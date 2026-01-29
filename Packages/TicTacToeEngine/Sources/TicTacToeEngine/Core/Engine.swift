@@ -63,6 +63,10 @@ class Engine {
     func boardCells() -> [BoardCell] {
         boardState.getCells(for: nil)
     }
+    
+    func emptyCells() -> [BoardCell] {
+        boardState.getCells(for: nil).filter { $0.type == .none }
+    }
 }
 
 private extension Engine {
