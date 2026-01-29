@@ -12,5 +12,5 @@ struct BoardCell: Equatable {
     init(type: CellMarkType, toCell cell: CellCoordinate) {
         self.type = type
         self.cell = cell
-    }    
+    }
 }
