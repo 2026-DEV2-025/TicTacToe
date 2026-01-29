@@ -61,20 +61,25 @@ class Engine {
         return nil
     }
 
-    //fixme: probably no need
-    func boardCells(for type: CellMarkType) -> [CellCoordinate?] {
-        boardState.getCells(for: type)
+    func boardCells() -> [BoardCell] {
+        boardState.getCells(for: nil)
     }
 }
 
 private extension Engine {
+    func cellsForType(_ type: CellMarkType) -> [CellCoordinate?] {
+        return boardState.getCells(for: type).map { cell in
+            cell.type == type ? cell.cell : nil
+        }
+    }
+
     func checkRows(for type: CellMarkType) -> [CellCoordinate]? {
-        let cells = boardState.getCells(for: type)
+        let cells = cellsForType(type)
         return winningLine(in: cells, lineLength: boardState.boardSize)
     }
     
     func checkColumns(for type: CellMarkType) -> [CellCoordinate]? {
-        guard let cells = boardState.getCells(for: type).transposed() else {
+        guard let cells = cellsForType(type).transposed() else {
             return nil
         }
         return winningLine(in: cells, lineLength: boardState.boardSize)
@@ -82,8 +87,8 @@ private extension Engine {
     
     func checkDiagonals(for type: CellMarkType) -> [CellCoordinate]? {
         guard
-            let cellsDiagonal = boardState.getCells(for: type).diagonalTopLeftToBottomRight(),
-            let cellsAntiDiagonal = boardState.getCells(for: type).diagonalTopRightToBottomLeft()
+            let cellsDiagonal = cellsForType(type).diagonalTopLeftToBottomRight(),
+            let cellsAntiDiagonal = cellsForType(type).diagonalTopRightToBottomLeft()
         else {
             return nil
         }
