@@ -10,10 +10,11 @@ import TicTacToeEngine
 
 struct MainView: View {
     
-    @StateObject var mainViewModel = MainViewModel()
-    
-    
-    let GRID_SIZE: Int = 3  //fixme: make injection
+    @StateObject private var mainViewModel: MainViewModel
+
+    init(mainViewModel: MainViewModel = MainViewModel()) {
+        _mainViewModel = StateObject(wrappedValue: mainViewModel)
+    }
     
     var body: some View {
         GeometryReader { geo in
@@ -51,7 +52,7 @@ struct MainView: View {
         let yPosition = isLandscape ? geo.size.height + safeAreaInsets.bottom : geo.size.height - sideLength
         let safeSideLength = isLandscape ? sideLength + safeAreaInsets.bottom  : sideLength
         
-        return GridView(gridSize: GRID_SIZE)
+        return GridView(gridSize: mainViewModel.boardSize)
             .frame(width: safeSideLength, height: safeSideLength)
             .position(x: xPosition / 2, y: yPosition / 2)
     }

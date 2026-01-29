@@ -5,11 +5,23 @@
 //  Created by 2026-DEV2-025 on 29/01/2026.
 //
 
-import Combine
 import SwiftUI
 import TicTacToeEngine
 
-class MainViewModel : ObservableObject {
+@MainActor
+final class MainViewModel: ObservableObject {
+    let boardSize: Int
+    let engine: Engine
 
-    let engine = TicTacToeEngine.
+    init(engine: Engine, boardSize: Int) {
+        self.engine = engine
+        self.boardSize = boardSize
+    }
+
+    convenience init(boardSize: Int = 3) {
+        let boardState = BoardStateImpl(moves: [], boardSize: boardSize)
+        let rules = EngineRulesImpl(boardState: boardState)
+        let engine = Engine(boardState: boardState, engineRules: rules)
+        self.init(engine: engine, boardSize: boardSize)
+    }
 }
