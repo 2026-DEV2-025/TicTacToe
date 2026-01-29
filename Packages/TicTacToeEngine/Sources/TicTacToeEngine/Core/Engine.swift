@@ -20,33 +20,50 @@ class Engine {
         
         if rulesResult == .noMoreMovesAllowedError {
             let lastPlayerMove = boardState.moves.last!
-            return checkWinner(for: lastPlayerMove.player.type)
+            if let winnerResult = checkWinner(for: lastPlayerMove.player.type) {
+                return winnerResult
+            } else {
+                return .init(winningMark: .none, winningCells: nil, rulesResult: .draw)
+            }
         }
         
         if rulesResult != .moveSucceeded {
-            return .init(type: move.player.type, cells: nil, rulesResult: rulesResult)
+            return .init(winningMark: move.player.type, winningCells: nil, rulesResult: rulesResult)
         }
         
         boardState.addMove(move)
         
-        return checkWinner(for: move.player.type)
+        if let winResult = checkWinner(for: move.player.type) {
+            return winResult
+        }
+        
+        if boardState.boardIsFull() {
+            return .init(winningMark: .none, winningCells: nil, rulesResult: .draw)
+        }
+        
+        return .init(winningMark: .none, winningCells: nil, rulesResult: .moveSucceeded)
     }
     
-    func checkWinner(for type: PlayerType) -> EngineResult {
+    func checkWinner(for type: PlayerType) -> EngineResult? {
         
         if let rows = checkRows(for: type) {
-            return .init(type: type, cells: rows, rulesResult: .moveSucceeded)
+            return .init(winningMark: type, winningCells: rows, rulesResult: .winning)
         }
 
         if let columns = checkColumns(for: type)  {
-            return .init(type: type, cells: columns, rulesResult: .moveSucceeded)
+            return .init(winningMark: type, winningCells: columns, rulesResult: .winning)
         }
                 
         if let diagonal = checkDiagonals(for: type) {
-            return .init(type: type, cells: diagonal, rulesResult: .moveSucceeded)
+            return .init(winningMark: type, winningCells: diagonal, rulesResult: .winning)
         }
         
-        return .init(type: .none, cells: nil, rulesResult: .moveSucceeded)
+        return nil
+    }
+
+    //fixme: probably no need
+    func boardCells(for type: PlayerType) -> [BoardCell?] {
+        boardState.getCells(for: type)
     }
 }
 

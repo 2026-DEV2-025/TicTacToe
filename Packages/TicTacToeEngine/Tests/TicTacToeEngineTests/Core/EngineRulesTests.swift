@@ -154,9 +154,9 @@ final class EngineRulesTests: XCTestCase {
         let lastPlayed = boardState.moves.last!
         let winner = engine.checkWinner(for: lastPlayed.player.type)
         XCTAssertNotNil(winner)
-        XCTAssertEqual(winner.type, .x)
-        XCTAssertEqual(winner.cells, validationWinnerCells)
-        XCTAssertEqual(winner.rulesResult, .moveSucceeded)
+        XCTAssertEqual(winner?.winningMark, .x)
+        XCTAssertEqual(winner?.winningCells, validationWinnerCells)
+        XCTAssertEqual(winner?.rulesResult, .winning)
     }
         
     func testPlayerHasThreeInAColumn() throws {
@@ -179,9 +179,9 @@ final class EngineRulesTests: XCTestCase {
         let lastPlayed = boardState.moves.last!
         let winner = engine.checkWinner(for: lastPlayed.player.type)
         XCTAssertNotNil(winner)
-        XCTAssertEqual(winner.type, .x)
-        XCTAssertEqual(winner.cells, validationWinnerCells.transposed()!.compactMap { $0 })
-        XCTAssertEqual(winner.rulesResult, .moveSucceeded)
+        XCTAssertEqual(winner?.winningMark, .x)
+        XCTAssertEqual(winner?.winningCells, validationWinnerCells.transposed()!.compactMap { $0 })
+        XCTAssertEqual(winner?.rulesResult, .winning)
     }
     
     func testPlayerHasWinnerInAColumn() throws {
@@ -204,9 +204,9 @@ final class EngineRulesTests: XCTestCase {
         let lastPlayed = boardState.moves.last!
         let winner = engine.checkWinner(for: lastPlayed.player.type)
         XCTAssertNotNil(winner)
-        XCTAssertEqual(winner.type, .x)
-        XCTAssertEqual(winner.cells, validationWinnerCells.transposed()!.compactMap { $0 })
-        XCTAssertEqual(winner.rulesResult, .moveSucceeded)
+        XCTAssertEqual(winner?.winningMark, .x)
+        XCTAssertEqual(winner?.winningCells, validationWinnerCells.transposed()!.compactMap { $0 })
+        XCTAssertEqual(winner?.rulesResult, .winning)
     }
     
     func testPlayerHasThreeInADiagonal() throws {
@@ -226,27 +226,33 @@ final class EngineRulesTests: XCTestCase {
         let lastPlayed = boardState.moves.last!
         let winner = engine.checkWinner(for: lastPlayed.player.type)
         XCTAssertNotNil(winner)
-        XCTAssertEqual(winner.type, .x)
-        XCTAssertEqual(winner.cells, validationWinnerCells)
-        XCTAssertEqual(winner.rulesResult, .moveSucceeded)
+        XCTAssertEqual(winner?.winningMark, .x)
+        XCTAssertEqual(winner?.winningCells, validationWinnerCells)
+        XCTAssertEqual(winner?.rulesResult, .winning)
     }
     
     func testAllCellsAreFilledAndDrawHappen() throws {
-        let move1 = PlayerMove(player: .init(type: .x), toCell: .init(row: 0, column: 0))
+        let move1 = PlayerMove(player: .init(type: .o), toCell: .init(row: 0, column: 0))
         let move2 = PlayerMove(player: .init(type: .x), toCell: .init(row: 0, column: 1))
         let move3 = PlayerMove(player: .init(type: .o), toCell: .init(row: 0, column: 2))
-        let movesTmp = [move1, move2, move3]
-        let moves = movesTmp + movesTmp.reversed() + movesTmp
+
+        let move11 = PlayerMove(player: .init(type: .o), toCell: .init(row: 1, column: 0))
+        let move12 = PlayerMove(player: .init(type: .x), toCell: .init(row: 1, column: 1))
+        let move13 = PlayerMove(player: .init(type: .x), toCell: .init(row: 1, column: 2))
+
+        let move21 = PlayerMove(player: .init(type: .x), toCell: .init(row: 2, column: 0))
+        let move22 = PlayerMove(player: .init(type: .x), toCell: .init(row: 2, column: 1))
+        
+        let moves = [move1, move2, move3, move11, move12, move13, move21, move22]
         let boardState = BoardStateImpl(moves: moves, boardSize: 3)
         let engineRules = EngineRulesImpl(boardState: boardState)
         let engine = Engine(boardState: boardState, engineRules: engineRules)
-
-        let lastPlayed = boardState.moves.last!
-        let winner = engine.checkWinner(for: lastPlayed.player.type)
+        let lastMove = PlayerMove(player: .init(type: .o), toCell: .init(row: 2, column: 2))
+        let winner = engine.makeMove(by: lastMove)
         XCTAssertNotNil(winner)
-        XCTAssertEqual(winner.type, .none)
-        XCTAssertNil(winner.cells)
-        XCTAssertEqual(winner.rulesResult, .moveSucceeded)
+        XCTAssertEqual(winner.winningMark, .none)
+        XCTAssertNil(winner.winningCells)
+        XCTAssertEqual(winner.rulesResult, .draw)
     }
     
     func testBoardIsFull() throws {
@@ -291,12 +297,11 @@ final class EngineRulesTests: XCTestCase {
         ]
         
         let nextMove = PlayerMove(player: .init(type: .o), toCell: .init(row: 3, column: 3))
-        
         let winner = engine.makeMove(by: nextMove)
         XCTAssertNotNil(winner)
-        XCTAssertEqual(winner.type, .x)
-        XCTAssertEqual(winner.cells, validationWinnerCells)
-        XCTAssertEqual(winner.rulesResult, .moveSucceeded)
+        XCTAssertEqual(winner.winningMark, .x)
+        XCTAssertEqual(winner.winningCells, validationWinnerCells)
+        XCTAssertEqual(winner.rulesResult, .winning)
     }
 
     func testAllCellsAreFilledAndOPlayerHasWon() throws {
@@ -323,9 +328,9 @@ final class EngineRulesTests: XCTestCase {
         
         let winner = engine.makeMove(by: nextMove)
         XCTAssertNotNil(winner)
-        XCTAssertEqual(winner.type, .o)
-        XCTAssertEqual(winner.cells, validationWinnerCells)
-        XCTAssertEqual(winner.rulesResult, .moveSucceeded)
+        XCTAssertEqual(winner.winningMark, .o)
+        XCTAssertEqual(winner.winningCells, validationWinnerCells)
+        XCTAssertEqual(winner.rulesResult, .winning)
     }
 
     

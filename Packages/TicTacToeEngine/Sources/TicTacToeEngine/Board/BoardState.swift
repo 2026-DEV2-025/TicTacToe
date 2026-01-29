@@ -12,7 +12,8 @@ protocol BoardState {
     var lastPlayedMove: PlayerMove? { get }
     func addMove(_ move: PlayerMove)
     func getCells(for type: PlayerType) -> [BoardCell?]
-    
+    func boardIsFull() -> Bool
+    func prettyPrintCells()
 }
 
 final class BoardStateImpl: BoardState {
@@ -40,6 +41,10 @@ final class BoardStateImpl: BoardState {
         _moves.append(move)
     }
     
+    func boardIsFull() -> Bool {
+        return moves.count == boardSize * boardSize
+    }
+    
     func getCells(for type: PlayerType) -> [BoardCell?] {
         var cells = [BoardCell?]()
         for rowIndex in 0..<boardSize {
@@ -53,5 +58,30 @@ final class BoardStateImpl: BoardState {
             }
         }
         return cells
+    }
+
+    func prettyPrintCells() {
+        var rows = [String]()
+        for rowIndex in 0..<boardSize {
+            var rowMarks = [String]()
+            for colIndex in 0..<boardSize {
+                if let type: PlayerType = moves.first(
+                    where: { $0.cell.row == rowIndex && $0.cell.column == colIndex }
+                )?.player.type {
+                    
+                    switch type {
+                    case .x:
+                        rowMarks.append("x")
+                    case .o:
+                        rowMarks.append("o")
+                    case .none:
+                        rowMarks.append(" ")
+                    }
+                }
+            }
+            rows.append("| " + rowMarks.joined(separator: " | ") + " |")
+        }
+
+        print(rows.joined(separator: "\n"))
     }
 }

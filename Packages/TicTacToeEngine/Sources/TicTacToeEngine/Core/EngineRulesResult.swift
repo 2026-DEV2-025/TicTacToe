@@ -6,7 +6,9 @@
 //
 
 enum EngineRulesResult {
+    case draw
     case moveSucceeded
+    case winning
     case onlyXMustStartError
     case cellIsAlreadyTakenError
     case mustAlternateTurnsError
