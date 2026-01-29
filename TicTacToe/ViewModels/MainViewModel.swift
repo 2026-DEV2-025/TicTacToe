@@ -7,21 +7,23 @@
 
 import SwiftUI
 import TicTacToeEngine
+import Combine
+
 
 @MainActor
 final class MainViewModel: ObservableObject {
+    let boardViewModel: BoardViewModel
+    let engine: TicTacToeEngine
     let boardSize: Int
-    let engine: Engine
-
-    init(engine: Engine, boardSize: Int) {
+    
+    init(engine: TicTacToeEngine, boardSize: Int) {
         self.engine = engine
         self.boardSize = boardSize
+        self.boardViewModel = BoardViewModel(engine: engine, boardSize: boardSize)
     }
 
     convenience init(boardSize: Int = 3) {
-        let boardState = BoardStateImpl(moves: [], boardSize: boardSize)
-        let rules = EngineRulesImpl(boardState: boardState)
-        let engine = Engine(boardState: boardState, engineRules: rules)
+        let engine = TicTacToeEngine(boardSize: boardSize)
         self.init(engine: engine, boardSize: boardSize)
     }
 }

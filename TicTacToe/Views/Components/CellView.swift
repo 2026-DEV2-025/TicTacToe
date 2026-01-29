@@ -7,13 +7,9 @@
 
 import SwiftUI
 
-enum CellState: String, Equatable { //fixme: move to the engine
-    case x = "xmark", o = "circle", none = ""
-}
-
 struct CellView : View {
     let cellId: Int
-    var cellState: CellState
+    var cellState: MarkIcon
     var body: some View {
         drawButton(with: cellState)
         .aspectRatio(1, contentMode: .fit)
@@ -22,11 +18,11 @@ struct CellView : View {
         
     }
 
-    func drawButton(with cellState: CellState) -> some View {
+    func drawButton(with markIcon: MarkIcon) -> some View {
         GeometryReader { geo in
                 let side = geo.size.width * 0.7
 
-                Image(systemName: "circle")
+            Image(systemName: markIcon.rawValue)
                     .resizable()
                     .frame(width: side, height: side)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)

@@ -12,7 +12,7 @@ struct MainView: View {
     
     @StateObject private var mainViewModel: MainViewModel
 
-    init(mainViewModel: MainViewModel = MainViewModel()) {
+    init(mainViewModel: MainViewModel) {
         _mainViewModel = StateObject(wrappedValue: mainViewModel)
     }
     
@@ -39,7 +39,6 @@ struct MainView: View {
                 VStack(spacing: 24) {
                     Text("TicTacToe")
                         .font(Font.largeTitle)
-
                     gridView(geo, sideLength: sideLength, isLandscape)
                 }
             }
@@ -52,12 +51,13 @@ struct MainView: View {
         let yPosition = isLandscape ? geo.size.height + safeAreaInsets.bottom : geo.size.height - sideLength
         let safeSideLength = isLandscape ? sideLength + safeAreaInsets.bottom  : sideLength
         
-        return GridView(gridSize: mainViewModel.boardSize)
+        return GridView(viewModel: mainViewModel.boardViewModel)
             .frame(width: safeSideLength, height: safeSideLength)
             .position(x: xPosition / 2, y: yPosition / 2)
     }
 }
 
 #Preview {
-    MainView()
+    let boardSize = 3
+    MainView(mainViewModel: MainViewModel(engine: TicTacToeEngine(boardSize: boardSize), boardSize: boardSize))
 }

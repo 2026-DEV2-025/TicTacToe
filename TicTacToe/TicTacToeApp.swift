@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import TicTacToeEngine
 
 @main
 struct TicTacToeApp: App {
     var body: some Scene {
         WindowGroup {
-            MainView()
+            let boardSize: Int = 3
+            MainView(mainViewModel: MainViewModel(engine: TicTacToeEngine(boardSize: 3), boardSize: boardSize))
         }
     }
 }

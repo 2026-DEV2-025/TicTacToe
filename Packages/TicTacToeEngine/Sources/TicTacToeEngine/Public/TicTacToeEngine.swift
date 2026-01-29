@@ -22,11 +22,17 @@ public final class TicTacToeEngine {
 
     @discardableResult
     public func makeMove(mark: Mark, cell: Cell) -> MovingResult {
+        print("AAA: Cell[\(cell.row):\(cell.column)], Mark: \(mark)")
         let boardCell = BoardCell(
             type: mark.asCellMarkType,
             toCell: .init(row: cell.row, column: cell.column)
         )
         let engineResult = engine.makeMove(by: boardCell)
+        
+        if let wc = engineResult.winningCells {
+            print("AAA: Winning cells\(wc.map({ "\($0.row):\($0.column)" })) ")
+        }
+        
         return toMovingResult(engineResult)
     }
 
