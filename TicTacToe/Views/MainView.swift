@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  MainView.swift
 //  TicTacToe
 //
 //  Created by 2026-DEV2-025 on 21/01/2026.
@@ -8,7 +8,10 @@
 import SwiftUI
 import TicTacToeEngine
 
-struct ContentView: View {
+struct MainView: View {
+    
+    @StateObject var mainViewModel = MainViewModel()
+    
     
     let GRID_SIZE: Int = 3  //fixme: make injection
     
@@ -55,5 +58,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    MainView()
 }
