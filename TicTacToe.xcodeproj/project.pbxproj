@@ -44,11 +44,6 @@
 			path = TicTacToeTests;
 			sourceTree = "<group>";
 		};
-		6338C9D92F21892400658AE5 /* TicTacToeUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TicTacToeUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,7 +84,6 @@
 			children = (
 				6338C9C12F21892300658AE5 /* TicTacToe */,
 				6338C9CF2F21892400658AE5 /* TicTacToeTests */,
-				6338C9D92F21892400658AE5 /* TicTacToeUITests */,
 				6306A0AF2F2191B10007A682 /* Frameworks */,
 				6338C9C02F21892300658AE5 /* Products */,
 			);
@@ -166,9 +160,6 @@
 			);
 			dependencies = (
 				6338C9D82F21892400658AE5 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				6338C9D92F21892400658AE5 /* TicTacToeUITests */,
 			);
 			name = TicTacToeUITests;
 			packageProductDependencies = (

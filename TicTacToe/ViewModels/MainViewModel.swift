@@ -32,8 +32,15 @@ final class MainViewModel: ObservableObject {
         self.init(engine: engine, boardSize: boardSize)
     }
     
+    deinit {
+        //adding empty deinit because of pointer being freed was not allocated crash
+        //well explained here: https://www.monkey.work/blog/2025-11-18-swift-ui-pointer-being-freed-was-not-allocated/
+    }
+
     func restartGame() {
         boardViewModel.reset()
     }
+    
+    
     
 }
