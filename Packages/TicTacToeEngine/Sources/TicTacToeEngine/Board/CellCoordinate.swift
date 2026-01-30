@@ -13,4 +13,8 @@ struct CellCoordinate: Equatable {
         self.row = row
         self.column = column
     }
+    
+    var swapped: CellCoordinate {
+        CellCoordinate(row: column, column: row)
+    }
 }
