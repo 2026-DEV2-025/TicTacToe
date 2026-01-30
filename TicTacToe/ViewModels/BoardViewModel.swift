@@ -18,6 +18,8 @@ final class BoardViewModel: ObservableObject {
     @Published private(set) var winningCells: [Cell]?
     @Published private(set) var winningResult: WiningResult = .none
     @Published private(set) var rulesResult: RulesResult?
+    @Published private(set) var currentStatus: Status
+    var onStatusUpdate: ((Status) -> Void)?
 
     private var nextMark: Mark = .x
 
@@ -25,6 +27,8 @@ final class BoardViewModel: ObservableObject {
         self.engine = engine
         self.boardSize = boardSize
         self.cells = engine.boardCells()
+        self.currentStatus = Status(color: .primary, text: "X's turn")
+        self.onStatusUpdate?(currentStatus)
     }
 
     convenience init(boardSize: Int = 3) {
@@ -47,6 +51,8 @@ final class BoardViewModel: ObservableObject {
         let cell = Cell(row: row, column: column)
         guard engine.isCellAvailable(cell) else {
             rulesResult = .cellIsAlreadyTakenError
+            currentStatus = Status(color: .red, text: "That cell is already taken.")
+            onStatusUpdate?(currentStatus)
             return
         }
 
@@ -56,6 +62,9 @@ final class BoardViewModel: ObservableObject {
         if result.rulesResult == .moveSucceeded {
             toggleNextMark()
         }
+        
+        currentStatus = updateStatus(from: result)
+        onStatusUpdate?(currentStatus)
     }
 
     func reset() {
@@ -65,6 +74,49 @@ final class BoardViewModel: ObservableObject {
         winningResult = .none
         rulesResult = nil
         nextMark = .x
+        currentStatus = Status(color: .primary, text: "X's turn")
+        onStatusUpdate?(currentStatus)
+    }
+    
+    func updateStatus(from result: MovingResult) -> Status {
+        func markText(_ mark: Mark) -> String {
+            switch mark {
+            case .x:
+                return "X"
+            case .o:
+                return "O"
+            case .none:
+                return "?"
+            }
+        }
+
+        switch result.winningResult {
+        case .win:
+            return .init(color: .green, text: "\(markText(result.mark)) wins!")
+        case .draw:
+            return .init(color: .secondary, text: "Draw!")
+        case .none:
+            break
+        }
+
+        if let rulesResult = result.rulesResult {
+            switch rulesResult {
+            case .moveSucceeded:
+                return .init(color: .primary, text: "\(markText(nextMark))'s turn")
+            case .onlyXMustStartError:
+                return .init(color: .red, text: "Only X can start the game.")
+            case .cellIsAlreadyTakenError:
+                return .init(color: .red, text: "That cell is already taken.")
+            case .mustAlternateTurnsError:
+                return .init(color: .red, text: "You must alternate turns.")
+            case .noMoreMovesAllowedError:
+                return .init(color: .red, text: "No more moves allowed.")
+            case .unknownError:
+                return .init(color: .red, text: "Unknown error.")
+            }
+        }
+
+        return .init(color: .primary, text: "\(markText(nextMark))'s turn")
     }
 }
 
