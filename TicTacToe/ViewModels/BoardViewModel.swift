@@ -27,7 +27,7 @@ final class BoardViewModel: ObservableObject {
         self.engine = engine
         self.boardSize = boardSize
         self.cells = engine.boardCells()
-        self.currentStatus = Status(color: .primary, text: "X's turn")
+        self.currentStatus = Status(color: .primary, text: Strings.Status.xTurn)
         self.onStatusUpdate?(currentStatus)
     }
 
@@ -51,7 +51,7 @@ final class BoardViewModel: ObservableObject {
         let cell = Cell(row: row, column: column)
         guard engine.isCellAvailable(cell) else {
             rulesResult = .cellIsAlreadyTakenError
-            currentStatus = Status(color: .red, text: "That cell is already taken.")
+            currentStatus = Status(color: .red, text: Strings.Status.cellAlreadyTaken)
             onStatusUpdate?(currentStatus)
             return
         }
@@ -74,7 +74,7 @@ final class BoardViewModel: ObservableObject {
         winningResult = .none
         rulesResult = nil
         nextMark = .x
-        currentStatus = Status(color: .primary, text: "X's turn")
+        currentStatus = Status(color: .primary, text: Strings.Status.xTurn)
         onStatusUpdate?(currentStatus)
     }
     
@@ -82,19 +82,19 @@ final class BoardViewModel: ObservableObject {
         func markText(_ mark: Mark) -> String {
             switch mark {
             case .x:
-                return "X"
+                return Strings.Mark.x
             case .o:
-                return "O"
+                return Strings.Mark.o
             case .none:
-                return "?"
+                return Strings.Mark.unknown
             }
         }
 
         switch result.winningResult {
         case .win:
-            return .init(color: .green, text: "\(markText(result.mark)) wins!")
+            return .init(color: .green, text: Strings.Status.wins(markText(result.mark)))
         case .draw:
-            return .init(color: .secondary, text: "Draw!")
+            return .init(color: .secondary, text: Strings.Status.draw)
         case .none:
             break
         }
@@ -102,21 +102,21 @@ final class BoardViewModel: ObservableObject {
         if let rulesResult = result.rulesResult {
             switch rulesResult {
             case .moveSucceeded:
-                return .init(color: .primary, text: "\(markText(nextMark))'s turn")
+                return .init(color: .primary, text: Strings.Status.turn(for: markText(nextMark)))
             case .onlyXMustStartError:
-                return .init(color: .red, text: "Only X can start the game.")
+                return .init(color: .red, text: Strings.Status.onlyXMustStart)
             case .cellIsAlreadyTakenError:
-                return .init(color: .red, text: "That cell is already taken.")
+                return .init(color: .red, text: Strings.Status.cellAlreadyTaken)
             case .mustAlternateTurnsError:
-                return .init(color: .red, text: "You must alternate turns.")
+                return .init(color: .red, text: Strings.Status.mustAlternateTurns)
             case .noMoreMovesAllowedError:
-                return .init(color: .red, text: "No more moves allowed.")
+                return .init(color: .red, text: Strings.Status.noMoreMoves)
             case .unknownError:
-                return .init(color: .red, text: "Unknown error.")
+                return .init(color: .red, text: Strings.Status.unknownError)
             }
         }
 
-        return .init(color: .primary, text: "\(markText(nextMark))'s turn")
+        return .init(color: .primary, text: Strings.Status.turn(for: markText(nextMark)))
     }
 }
 
