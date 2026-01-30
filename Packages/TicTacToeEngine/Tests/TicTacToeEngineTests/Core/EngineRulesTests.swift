@@ -177,7 +177,7 @@ final class EngineRulesTests: XCTestCase {
         let winner = engine.checkWinner(for: lastPlayed.type)
         XCTAssertNotNil(winner)
         XCTAssertEqual(winner?.winningMark, .x)
-        XCTAssertEqual(winner?.winningCells, validationWinnerCells.transposed()!.compactMap { $0 })
+        XCTAssertEqual(winner?.winningCells, validationWinnerCells.transposed()!.compactMap { $0?.swapped })
         XCTAssertEqual(winner?.rulesResult, .winning)
     }
     
@@ -191,6 +191,8 @@ final class EngineRulesTests: XCTestCase {
             boardState.addMove(moveBy)
             validationWinnerCells.append(moveBy.cell)
         }
+        
+        validationWinnerCells = validationWinnerCells.map({ $0?.swapped })
         
         //adding padding so column will be transposed correctly for the validation
         validationWinnerCells.append(contentsOf: Array(repeating: nil, count: boardState.boardSize * boardState.boardSize - boardState.boardSize))

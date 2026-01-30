@@ -30,6 +30,11 @@ final class BoardViewModel: ObservableObject {
         self.currentStatus = Status(color: .primary, text: Strings.Status.xTurn)
         self.onStatusUpdate?(currentStatus)
     }
+    
+    deinit {
+        //adding empty deinit because of pointer being freed was not allocated crash
+        //well explained here: https://www.monkey.work/blog/2025-11-18-swift-ui-pointer-being-freed-was-not-allocated/
+    }
 
     convenience init(boardSize: Int = 3) {
         self.init(engine: TicTacToeEngine(boardSize: boardSize), boardSize: boardSize)
