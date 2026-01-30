@@ -34,8 +34,11 @@ struct MainView: View {
                         .font(.title2.weight(.semibold))
                         .multilineTextAlignment(.center)
                         gridView(geo, sideLength: sideLength, isLandscape)
+                        statusLabel()
                     }
                     restartButton()
+                    
+                    
                 }
             } else {
                 VStack(spacing: 5) {
@@ -46,9 +49,17 @@ struct MainView: View {
                         restartButton()
                     }.padding()
                     gridView(geo, sideLength: sideLength, isLandscape)
+                    statusLabel()
                 }
             }
         }
+    }
+    
+    func statusLabel() -> some View {
+        Text(mainViewModel.status.text)
+            .foregroundStyle(mainViewModel.status.color)
+            .font(.largeTitle)
+            .padding()
     }
     
     func restartButton() -> some View {
@@ -67,8 +78,8 @@ struct MainView: View {
         let safeSideLength = isLandscape ? sideLength + safeAreaInsets.bottom  : sideLength
         
         return GridView(viewModel: mainViewModel.boardViewModel)
-            .frame(width: safeSideLength, height: safeSideLength)
             .position(x: xPosition / 2, y: yPosition / 2)
+            .frame(width: safeSideLength, height: safeSideLength)
     }
 }
 

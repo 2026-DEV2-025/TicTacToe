@@ -15,11 +15,16 @@ final class MainViewModel: ObservableObject {
     let boardViewModel: BoardViewModel
     let engine: TicTacToeEngine
     let boardSize: Int
+    @Published private(set) var status: Status
     
     init(engine: TicTacToeEngine, boardSize: Int) {
         self.engine = engine
         self.boardSize = boardSize
         self.boardViewModel = BoardViewModel(engine: engine, boardSize: boardSize)
+        self.status = boardViewModel.currentStatus
+        self.boardViewModel.onStatusUpdate = { [weak self] status in
+            self?.status = status
+        }
     }
 
     convenience init(boardSize: Int = 3) {
@@ -30,4 +35,5 @@ final class MainViewModel: ObservableObject {
     func restartGame() {
         boardViewModel.reset()
     }
+    
 }
