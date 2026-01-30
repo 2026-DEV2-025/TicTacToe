@@ -26,4 +26,8 @@ final class MainViewModel: ObservableObject {
         let engine = TicTacToeEngine(boardSize: boardSize)
         self.init(engine: engine, boardSize: boardSize)
     }
+    
+    func restartGame() {
+        boardViewModel.reset()
+    }
 }

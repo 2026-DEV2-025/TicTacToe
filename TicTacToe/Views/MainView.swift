@@ -24,24 +24,39 @@ struct MainView: View {
             let isLandscape = width > height
 
             if isLandscape {
-                HStack(spacing: 24) {
-                    VStack(alignment: .trailing, spacing: 3) {
-                        Text("TIC").font(Font.largeTitle)
-                        Text("TAC").font(Font.largeTitle)
-                        Text("TOE").font(Font.largeTitle)
-
+                ZStack(alignment: .topLeading) {
+                    HStack(spacing: 24) {
+                        VStack(alignment: .trailing, spacing: 3) {
+                            Text("TIC").font(Font.largeTitle)
+                            Text("TAC").font(Font.largeTitle)
+                            Text("TOE").font(Font.largeTitle)
+                        }
+                        .font(.title2.weight(.semibold))
+                        .multilineTextAlignment(.center)
+                        gridView(geo, sideLength: sideLength, isLandscape)
                     }
-                    .font(.title2.weight(.semibold))
-                    .multilineTextAlignment(.center)
-                    gridView(geo, sideLength: sideLength, isLandscape)
+                    restartButton()
                 }
             } else {
-                VStack(spacing: 24) {
-                    Text("TicTacToe")
-                        .font(Font.largeTitle)
+                VStack(spacing: 5) {
+                    HStack {
+                        Text("TicTacToe")
+                            .font(Font.largeTitle)
+                        Spacer()
+                        restartButton()
+                    }.padding()
                     gridView(geo, sideLength: sideLength, isLandscape)
                 }
             }
+        }
+    }
+    
+    func restartButton() -> some View {
+        Button(action: {
+            mainViewModel.restartGame()
+        }) {
+            Image(systemName: "arrow.clockwise.circle.fill")
+                .font(.system(size: 50, weight: .semibold))
         }
     }
     
