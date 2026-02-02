@@ -21,6 +21,8 @@ min `Xcode 26.1` (could be `Xcode 16` but not tested)
 ### Running on target
 Open the `TicTacToe.xcworkspace` and run on target. Minimum iOS target is set to `16.6`. No third-party components were used, so it will run out of the box.
 
+In the `TicTacToeApp.swift` you can `control size of the board` by updating `BOARD_SIZE` constant to get board size like 5x5, 7x7, etc.
+
 ## Running the unit tests
 Select the TicTacToe target to run tests for the app module
 Select the TicTacToeEngine target to run tests for the engine module

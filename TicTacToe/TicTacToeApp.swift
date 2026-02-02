@@ -12,8 +12,8 @@ import TicTacToeEngine
 struct TicTacToeApp: App {
     var body: some Scene {
         WindowGroup {
-            let boardSize: Int = 3
-            MainView(mainViewModel: MainViewModel(engine: TicTacToeEngine(boardSize: 3), boardSize: boardSize))
+            let BOARD_SIZE: Int = 3
+            MainView(mainViewModel: MainViewModel(engine: TicTacToeEngine(boardSize: BOARD_SIZE), boardSize: BOARD_SIZE))
         }
     }
 }
